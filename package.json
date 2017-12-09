@@ -1,0 +1,7 @@
+{
+  "name": "@bauxite/bauxite",
+  "author": "Jim O'Brien <npm@jimmed.net>",
+  "devDependencies": {
+    "lerna": "^2.5.1"
+  }
+}
