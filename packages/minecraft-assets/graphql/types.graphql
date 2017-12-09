@@ -1,0 +1,55 @@
+scalar DateTime
+
+enum MinecraftReleaseType {
+  Release
+  Snapshot
+  Beta
+  Alpha
+}
+
+enum MinecraftReleaseEnvironment {
+  Windows
+  OSX
+  Linux
+}
+
+type MinecraftVersion {
+  ID: ID!
+  type: MinecraftReleaseType!
+  uploadedAt: DateTime!
+  releasedAt: DateTime!
+  manifestUrl: String!
+  libraries(OS: MinecraftReleaseEnvironment!): [MinecraftLibrary]
+  client: MinecraftDownload
+  server: MinecraftDownload
+  assets: MinecraftVersionAssets
+}
+
+type MinecraftLibrary {
+  ID: ID!
+  downloads: [MinecraftDownload]!
+}
+
+type MinecraftDownload {
+  ID: ID!
+  url: String!
+  sha1: String!
+  path: String
+  size: Number
+}
+
+type MinecraftVersionAssets {
+  ID: ID!
+  manifestUrl: String!
+  sha1: String!
+  manifestSize: Int!
+  totalSize: Int!
+  downloads: [MinecraftDownload]!
+}
+
+extend type Query {
+  minecraftVersions(releaseTypes: [MinecraftReleaseType]): [MinecraftVersion]!
+  latestMinecraftVersion(
+    releaseType: MinecraftReleaseType = Release
+  ): MinecraftVersion!
+}

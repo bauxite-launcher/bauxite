@@ -1,10 +1,12 @@
 {
   "name": "@bauxite/minecraft-assets",
   "version": "0.0.0",
+  "main": "index.js",
   "scripts": {
     "test": "jest"
   },
   "dependencies": {
+    "lodash": "^4.17.4",
     "make-fetch-happen": "^2.6.0"
   },
   "devDependencies": {

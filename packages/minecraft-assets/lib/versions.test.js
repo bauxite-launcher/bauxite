@@ -1,30 +1,5 @@
 const { formatMinecraftVersions, getMinecraftVersions } = require('./versions')
 
-const fakeMinecraftVersions = {
-  versions: [
-    {
-      id: '17w49b',
-      type: 'snapshot',
-      time: '2017-12-07T15:31:34+00:00',
-      releaseTime: '2017-12-07T15:29:54+00:00',
-      url:
-        'https://launchermeta.mojang.com/mc/game/19d97d8ffffd71cce712414a2a9b95c1ed168e55/17w49b.json'
-    },
-    {
-      id: '1.12.2',
-      type: 'release',
-      time: '2017-12-07T09:55:13+00:00',
-      releaseTime: '2017-09-18T08:39:46+00:00',
-      url:
-        'https://launchermeta.mojang.com/mc/game/cf72a57ff499d6d9ade870b2143ee54958bd33ef/1.12.2.json'
-    }
-  ],
-  latest: {
-    snapshot: '17w49b',
-    release: '1.12.2'
-  }
-}
-
 describe('Versions API', () => {
   describe('formatMinecraftInstances', () => {
     let result
@@ -43,7 +18,7 @@ describe('Versions API', () => {
         expect(version.uploadedAt).toBeInstanceOf(Date)
         expect(version).toHaveProperty('releasedAt')
         expect(version.releasedAt).toBeInstanceOf(Date)
-        expect(version).toHaveProperty('assetManifestUrl')
+        expect(version).toHaveProperty('manifestUrl')
       })
     })
 
@@ -97,3 +72,28 @@ describe('Versions API', () => {
     })
   })
 })
+
+const fakeMinecraftVersions = {
+  versions: [
+    {
+      id: '17w49b',
+      type: 'snapshot',
+      time: '2017-12-07T15:31:34+00:00',
+      releaseTime: '2017-12-07T15:29:54+00:00',
+      url:
+        'https://launchermeta.mojang.com/mc/game/19d97d8ffffd71cce712414a2a9b95c1ed168e55/17w49b.json'
+    },
+    {
+      id: '1.12.2',
+      type: 'release',
+      time: '2017-12-07T09:55:13+00:00',
+      releaseTime: '2017-09-18T08:39:46+00:00',
+      url:
+        'https://launchermeta.mojang.com/mc/game/cf72a57ff499d6d9ade870b2143ee54958bd33ef/1.12.2.json'
+    }
+  ],
+  latest: {
+    snapshot: '17w49b',
+    release: '1.12.2'
+  }
+}

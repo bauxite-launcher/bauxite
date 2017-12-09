@@ -27,7 +27,7 @@ const formatMinecraftVersions = ({ latest, versions }) => {
       type: typeMap[type],
       uploadedAt: new Date(time),
       releasedAt: new Date(releaseTime),
-      assetManifestUrl: url
+      manifestUrl: url
     })
   )
 
