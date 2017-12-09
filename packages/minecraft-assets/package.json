@@ -1,4 +1,13 @@
 {
   "name": "@bauxite/minecraft-assets",
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "make-fetch-happen": "^2.6.0"
+  },
+  "devDependencies": {
+    "jest": "^21.2.1"
+  }
 }
