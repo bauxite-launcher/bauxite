@@ -35,7 +35,7 @@ type MinecraftDownload {
   url: String!
   sha1: String!
   path: String
-  size: Number
+  size: Int
 }
 
 type MinecraftVersionAssets {
@@ -47,7 +47,7 @@ type MinecraftVersionAssets {
   downloads: [MinecraftDownload]!
 }
 
-extend type Query {
+type Query {
   minecraftVersions(releaseTypes: [MinecraftReleaseType]): [MinecraftVersion]!
   latestMinecraftVersion(
     releaseType: MinecraftReleaseType = Release

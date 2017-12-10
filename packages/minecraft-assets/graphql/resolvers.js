@@ -1,43 +1,50 @@
+const { GraphQLDateTime } = require('graphql-iso-date')
+const { throttle } = require('lodash')
 const {
   getMinecraftVersions,
   getVersionManifest,
   getAssetManifest
 } = require('../')
-const { debounce } = require('lodash')
 
-const getMinecraftVersionsDebounced = debounce(getMinecraftVersions, 60000)
-const getVersionManifestDebounced = debounce(getVersionManifest, 60000)
-const getAssetManifestDebounced = debounce(getAssetManifest, 60000)
+const getMinecraftVersionsThrottled = throttle(getMinecraftVersions, 60000, {
+  trailing: false
+})
+const getVersionManifestThrottled = throttle(getVersionManifest, 60000, {
+  trailing: false
+})
+const getAssetManifestThrottled = throttle(getAssetManifest, 60000, {
+  trailing: false
+})
 
 module.exports = {
   Query: {
     async minecraftVersions(root, { releaseTypes = [] }, { fetch }) {
-      const { versions } = await getMinecraftVersionsDebounced({ fetch })
+      const { versions } = await getMinecraftVersionsThrottled({ fetch })
       if (!releaseTypes.length) return versions
       return versions.filter(({ type }) => releaseTypes.includes(type))
     },
-    async latestMinecraftVersion(root, { releaseType }, { fetch }) {
-      const { latest } = await getMinecraftVersionsDebounced({ fetch })
+    async latestMinecraftVersion(root, { releaseType } = {}, { fetch }) {
+      const { latest } = await getMinecraftVersionsThrottled({ fetch })
       return latest[releaseType]
     }
   },
   MinecraftVersion: {
     async libraries({ manifestUrl }, { OS }, { fetch }) {
-      const { libraries } = await getVersionManifestDebounced({
+      const { libraries } = await getVersionManifestThrottled({
         manifestUrl,
         fetch
       })
       return libraries[OS]
     },
     async client({ manifestUrl }, _, { fetch }) {
-      const { client } = await getMinecraftVersionsDebounced({
+      const { client } = await getMinecraftVersionsThrottled({
         manifestUrl,
         fetch
       })
       return client
     },
     async server({ manifestUrl }, _, { fetch }) {
-      const { server } = await getMinecraftVersionsDebounced({
+      const { server } = await getMinecraftVersionsThrottled({
         manifestUrl,
         fetch
       })
@@ -49,7 +56,8 @@ module.exports = {
   },
   MinecraftVersionAssets: {
     async downloads({ manifestUrl }, _, { fetch }) {
-      return await getAssetManifest({ manifestUrl, fetch })
+      return await getAssetManifestThrottled({ manifestUrl, fetch })
     }
-  }
+  },
+  DateTime: GraphQLDateTime
 }
