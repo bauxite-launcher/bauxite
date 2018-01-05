@@ -1,4 +1,5 @@
 const defaultFetch = require('make-fetch-happen')
+const { getMinecraftVersionByID } = require('./versions')
 
 const getVersionManifest = async ({
   manifestUrl,
@@ -10,20 +11,56 @@ const getVersionManifest = async ({
   return formatVersionManifest(assetManifest)
 }
 
-const formatVersionManifest = ({ id, assetIndex, libraries, downloads }) => {
+const getVersionManifestForVersion = async versionID => {
+  const version = await getMinecraftVersionByID(versionID)
+  if (!version) {
+    throw new Error(`Minecraft version "${versionID}" does not exist`)
+  }
+  const { manifestUrl } = version
+  return await getVersionManifest({ manifestUrl })
+}
+
+const formatVersionManifest = ({
+  id,
+  assetIndex,
+  libraries,
+  downloads,
+  ...rest
+}) => {
   return {
     ID: id,
-    assets: {
+    assetManifest: {
+      ID: assetIndex.id,
       manifestUrl: assetIndex.url,
       sha1: assetIndex.sha1,
       manifestSize: assetIndex.size,
       totalSize: assetIndex.totalSize
     },
     libraries: resolveLibrariesByOs(libraries),
-    client: downloads.client,
+    client: formatClient(downloads.client, rest),
     server: downloads.server
   }
 }
+
+const formatClient = (
+  download,
+  { minimumLauncherVersion, mainClass, minecraftArguments, logging }
+) => ({
+  minimumLauncherVersion,
+  mainClass,
+  download,
+  arguments: minecraftArguments,
+  logging: formatLoggingConfig(logging.client)
+})
+
+const formatLoggingConfig = ({ argument, file, type }) => ({
+  argument,
+  download: {
+    ...file,
+    path: file.id
+  },
+  type
+})
 
 const allOs = ['Windows', 'OSX', 'Linux']
 const baseLibrariesByOs = () =>
@@ -47,19 +84,42 @@ const libraryPermitsOs = ({ rules }) => os => {
     return ruleApplies ? rule.action === 'allow' : allowed
   }, false)
 }
-const formatLibrary = ({ name, downloads, natives, extract }, os) => {
+const formatLibrary = ({ name, downloads, natives, extract, rules }, os) => {
   const formattedDownloads = []
-  if (downloads.artifact) {
+
+  if (natives && natives[os]) {
+    formattedDownloads.push(
+      formatDownload(downloads.classifiers[natives[os]], { native: true })
+    )
+  } else if (downloads.artifact) {
     formattedDownloads.push(formatDownload(downloads.artifact))
   }
-  if (natives && natives[os]) {
-    formattedDownloads.push(formatDownload(downloads.classifiers[natives[os]]))
+  const formattedRules = rules ? rules.map(formatRule) : null
+  return {
+    ID: name,
+    extract,
+    rules: formattedRules,
+    downloads: formattedDownloads
   }
-  return { ID: name, extract, downloads: formattedDownloads }
 }
-const formatDownload = ({ sha1, ...rest }) => ({ ID: sha1, sha1, ...rest })
+const formatDownload = ({ sha1, ...rest }, extra = {}) => ({
+  ID: sha1,
+  sha1,
+  ...rest,
+  ...extra
+})
+const formatRule = ({ action, os }) => ({
+  action: action === 'allow' ? 'Allow' : 'Deny',
+  os: os
+    ? {
+        name: allOs.find(thisOs => thisOs.toLowerCase() === os.name),
+        version: os.version
+      }
+    : null
+})
 
 module.exports = {
   getVersionManifest,
-  formatVersionManifest
+  formatVersionManifest,
+  getVersionManifestForVersion
 }

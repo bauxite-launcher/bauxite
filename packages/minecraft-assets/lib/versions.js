@@ -7,7 +7,7 @@ const getMinecraftVersions = async ({
   fetch = defaultFetch,
   manifestUrl = defaultManifestUrl,
   ...fetchOptions
-}) => {
+} = {}) => {
   const result = await fetch(manifestUrl, fetchOptions)
   const manifest = await result.json()
   return formatMinecraftVersions(manifest)
@@ -42,4 +42,19 @@ const formatMinecraftVersions = ({ latest, versions }) => {
   return { versions: formattedVersions, latest: resolvedLatest }
 }
 
-module.exports = { getMinecraftVersions, formatMinecraftVersions }
+const getMinecraftVersionByID = async versionID => {
+  const { versions } = await getMinecraftVersions()
+  return versions.find(({ ID }) => ID === versionID)
+}
+
+const getLatestMinecraftVersionByType = async (type = 'Release') => {
+  const { latest } = await getMinecraftVersions()
+  return latest[type]
+}
+
+module.exports = {
+  getMinecraftVersions,
+  formatMinecraftVersions,
+  getMinecraftVersionByID,
+  getLatestMinecraftVersionByType
+}

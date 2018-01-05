@@ -1,4 +1,17 @@
 {
   "name": "@bauxite/minecraft-installer",
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^21.2.1",
+    "nock": "^9.1.4"
+  },
+  "dependencies": {
+    "fs-extra": "^5.0.0",
+    "lodash": "^4.17.4",
+    "make-fetch-happen": "^2.6.0",
+    "progress-stream": "^2.0.0"
+  }
 }

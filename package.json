@@ -1,11 +1,14 @@
 {
   "name": "@bauxite/bauxite",
+  "private": true,
   "author": "Jim O'Brien <npm@jimmed.net>",
   "scripts": {
     "test": "lerna run test"
   },
   "devDependencies": {
-    "jest": "^21.2.1",
     "lerna": "^2.5.1"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

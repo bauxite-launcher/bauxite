@@ -17,7 +17,7 @@ const makeSchema = async () => {
   return makeExecutableSchema({ typeDefs, resolvers })
 }
 
-const makeRemoteSchema = async ({ root = {} }) => {
+const makeRemoteSchema = async ({ root = {} } = {}) => {
   const schema = await makeSchema()
   const fetcher = async ({ query, variables, operationName, context }) => {
     return await execute(
@@ -29,7 +29,9 @@ const makeRemoteSchema = async ({ root = {} }) => {
       operationName
     )
   }
-  return makeRemoteExecutableSchema({ schema, fetcher })
+  const remoteSchema = makeRemoteExecutableSchema({ schema, fetcher })
+  remoteSchema.fetcher = fetcher
+  return remoteSchema
 }
 
 module.exports = { getTypeDefs, makeSchema, makeRemoteSchema }

@@ -12,7 +12,7 @@ describe('Minecraft Assets GraphQL API', () => {
   }
   const runQuery = describe('Query', () => {
     describe('minecraftVersions', () => {
-      const query = makeQuery(`query testVersions($type: [MinecraftReleaseType]){
+      const query = makeQuery(`query testVersions($type: [MinecraftReleaseType]) {
         minecraftVersions(releaseTypes: $type) {
           ID
           type
@@ -34,7 +34,7 @@ describe('Minecraft Assets GraphQL API', () => {
       })
     })
     describe('latestMinecraftVersion', () => {
-      const query = makeQuery(`query testLatestVersion($type: MinecraftReleaseType){
+      const query = makeQuery(`query testLatestVersion($type: MinecraftReleaseType) {
         latestMinecraftVersion(releaseType: $type) {
           ID
           type

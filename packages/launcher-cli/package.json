@@ -1,0 +1,10 @@
+{
+  "name": "@bauxite/launcher-cli",
+  "version": "0.0.0",
+  "dependencies": {
+    "inquirer": "^4.0.1",
+    "yargs": "^10.0.3",
+    "@bauxite/minecraft-assets": "^0.0.0",
+    "@bauxite/minecraft-installer": "^0.0.0"
+  }
+}

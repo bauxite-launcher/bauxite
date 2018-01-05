@@ -1,0 +1,25 @@
+scalar Int64
+
+scalar DateTime
+
+type LocalInstance {
+  directory: String!
+  servers: [RemoteServer]
+  client: LocalClient!
+}
+
+type LocalClient {
+  versionID: String!
+  jarFile: String!
+}
+
+type RemoteServer {
+  icon: String
+  host: String
+  name: String
+  acceptServerResources: Boolean
+}
+
+type Query {
+  testInstance: LocalInstance!
+}

@@ -27,12 +27,12 @@ describe('Versions API', () => {
     describe('when called with mock data', () => {
       let result
       beforeEach(() => (result = formatVersionManifest(fakeVersionManifest)))
-      it('should include an assets object', () => {
-        expect(result).toHaveProperty('assets')
-        expect(result).toHaveProperty('assets.manifestUrl')
-        expect(result).toHaveProperty('assets.sha1')
-        expect(result).toHaveProperty('assets.manifestSize')
-        expect(result).toHaveProperty('assets.totalSize')
+      it('should include an assetManifest object', () => {
+        expect(result).toHaveProperty('assetManifest')
+        expect(result).toHaveProperty('assetManifest.manifestUrl')
+        expect(result).toHaveProperty('assetManifest.sha1')
+        expect(result).toHaveProperty('assetManifest.manifestSize')
+        expect(result).toHaveProperty('assetManifest.totalSize')
       })
       it('should include a downloads object', () => {
         expect(result).toHaveProperty('client')

@@ -1,54 +1,127 @@
 scalar DateTime
 
+# The kinds of vanilla Minecraft releases
 enum MinecraftReleaseType {
+  # A stable release version (recommended for server play)
   Release
+  # A bleeding edge snapshot release (mileage may vary)
   Snapshot
+  # Beta versions from before the 1.0 release
   Beta
+  # Alpha versions from before the 1.0 release
   Alpha
 }
 
+# The operating systems for which Minecraft is built
 enum MinecraftReleaseEnvironment {
   Windows
   OSX
   Linux
 }
 
+# A versioned release of Minecraft
 type MinecraftVersion {
+  # The version ID of the release, e.g. '1.12.2' or '17w49b'
   ID: ID!
   type: MinecraftReleaseType!
   uploadedAt: DateTime!
   releasedAt: DateTime!
+  # The URL of the manifest file for this version
   manifestUrl: String!
-  libraries(OS: MinecraftReleaseEnvironment!): [MinecraftLibrary]
-  client: MinecraftDownload
+  # The Java dependencies for this release, filtered by release environment
+  libraries(
+    # The operating system to filter dependencies by
+    OS: MinecraftReleaseEnvironment!
+    # An optional OS version string to filter dependencies by
+    OSVersion: String
+  ): [MinecraftLibrary]
+  # Details surrounding how to download and launch the Minecraft client
+  client: MinecraftClientDetails
+  # The server Java archive for this version
   server: MinecraftDownload
+  # The graphics, sounds and translations for this version
   assets: MinecraftVersionAssets
 }
 
-type MinecraftLibrary {
-  ID: ID!
-  downloads: [MinecraftDownload]!
+type MinecraftClientDetails {
+  # The minimum version of launcher required for this version
+  minimumLauncherVersion: Int!
+  # The client Java archive to download
+  download: MinecraftDownload!
+  # The main Java class for launching the client
+  mainClass: String!
+  # The arguments to be passed to the main class when launching
+  arguments: String!
+  # Configuration for logging when launching the client
+  logging: MinecraftLoggingConfiguration
 }
 
-type MinecraftDownload {
+type MinecraftLoggingConfiguration {
+  argument: String!
+  download: MinecraftDownload!
+  type: String!
+}
+
+# A single version of a Java dependency
+type MinecraftLibrary {
+  # The canonical name of the library, e.g. com.acme:library:1.x
   ID: ID!
+  # An array of Java archives required by a dependency
+  downloads: [MinecraftDownload]!
+  # An optional set of rules to determine whether a given dependency applies to an OS
+  rules: [MinecraftLibraryRule]
+}
+
+enum MinecraftLibraryRuleAction {
+  Allow
+  Deny
+}
+
+type MinecraftLibraryRule {
+  action: MinecraftLibraryRuleAction!
+  os: MinecraftLibraryRuleOs
+}
+
+type MinecraftLibraryRuleOs {
+  name: MinecraftReleaseEnvironment!
+  version: String
+}
+
+# Represents a single remote file resource
+type MinecraftDownload {
+  # Unique ID, typically formed from the file sha1 hash
+  ID: ID!
+  # The remote URL of the file
   url: String!
+  # The sha1 hash of the remote file
   sha1: String!
+  # The local path to which the file should be installed
   path: String
+  # The size of the file in bytes
   size: Int
 }
 
+# Represents an asset manifest for a Minecraft version
 type MinecraftVersionAssets {
   ID: ID!
+  # The remote URL of the manifest file
   manifestUrl: String!
+  # The hash of the manifest file content
   sha1: String!
+  # The size of the manifest file in bytes
   manifestSize: Int!
+  # The total size of the assets listed in the manifest
   totalSize: Int!
+  # The assets listed in the manifest
   downloads: [MinecraftDownload]!
 }
 
 type Query {
+  # Finds all Minecraft versions, optionally filtered by one or more release types
   minecraftVersions(releaseTypes: [MinecraftReleaseType]): [MinecraftVersion]!
+  # Finds a specific version of Minecraft
+  minecraftVersion(ID: ID!): MinecraftVersion
+  # Returns the latest Minecraft version for a given release type (only for Release or Snapshot)
   latestMinecraftVersion(
     releaseType: MinecraftReleaseType = Release
   ): MinecraftVersion!

@@ -1,4 +1,25 @@
 {
   "name": "@bauxite/launcher-api",
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "scripts": {
+    "test": "jest",
+    "serve": "nodemon --ext js,graphql ./bin/serve.js"
+  },
+  "dependencies": {
+    "@bauxite/minecraft-assets": "^0.0.0",
+    "@bauxite/minecraft-installer": "^0.0.0",
+    "apollo-server-express": "^1.3.2",
+    "decompress": "^4.2.0",
+    "fs-extra": "^5.0.0",
+    "graphql": "^0.12.3",
+    "graphql-iso-date": "^3.3.0",
+    "graphql-tools": "^2.14.1",
+    "lodash": "^4.17.4",
+    "make-fetch-happen": "^2.6.0",
+    "ps-node": "^0.1.6"
+  },
+  "devDependencies": {
+    "express": "^4.16.2",
+    "nodemon": "^1.14.7"
+  }
 }
