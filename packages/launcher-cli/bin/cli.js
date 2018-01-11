@@ -1,4 +1,5 @@
-const yargs = require('yargs')
+#!/usr/bin/env node
 const path = require('path')
-yargs.commandDir(path.resolve(__dirname, '../lib'))
-
+require('yargs')
+  .commandDir(path.resolve(__dirname, '../lib'))
+  .help().argv

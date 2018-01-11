@@ -61,11 +61,30 @@ const createProfile = async (username, password) => {
     username,
     name: authResponse.selectedProfile.name,
     uuid: authResponse.selectedProfile.id,
-    properties: authResponse.user.properties || []
+    properties: authResponse.user.properties || [],
+    isDefault: profiles.length === 0
   }
+
   profiles.push(account)
   await writeProfiles(profiles)
   return account
+}
+
+const getDefaultProfile = async () => {
+  const profiles = await listProfiles()
+  return profiles.find(({ isDefault }) => isDefault)
+}
+
+const setDefaultProfile = async name => {
+  const profiles = await listProfiles()
+  const profile = profiles.find(({ name: thisName }) => thisName === name)
+  if (!profile) {
+    throw new Error(`Profile "${name}" has not been added`)
+  }
+  profiles.forEach(profile => {
+    profile.isDefault = profile.name === name
+  })
+  await writeProfiles(profiles)
 }
 
 const deleteProfile = async username => {
@@ -131,5 +150,7 @@ module.exports = {
   getAccessToken,
   getProfileByUsername,
   getProfileByUUID,
-  getProfileByName
+  getProfileByName,
+  getDefaultProfile,
+  setDefaultProfile
 }

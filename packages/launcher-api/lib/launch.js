@@ -113,8 +113,9 @@ const setProcessID = async (instanceDirectory, processID) =>
 const getCurrentProcessIDForInstance = async instanceID => {
   const instance = await getInstance(instanceID)
   const processID = await getProcessID(instance.directory)
-  if (!processID) return false
-  const [{ pid = null } = {}] = await lookupProcess({ pid: processID })
-  return pid
+  if (!processID) return null
+  const [{ pid } = {}] = await lookupProcess({ pid: processID })
+  return pid || null
 }
+
 module.exports = { startInstance, stopInstance, getCurrentProcessIDForInstance }
