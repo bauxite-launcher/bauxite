@@ -1,0 +1,20 @@
+$header-height: 100px;
+$footer-height: 35px;
+
+.App {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+  margin: 1rem 0;
+
+  .Header {
+    flex: 0 0 $header-height;
+  }
+  .Body {
+    flex: 1 1 calc(100% - #{$header-height} - #{$footer-height});
+  }
+  .Footer {
+    flex: 0 0 $footer-height;
+  }
+}
