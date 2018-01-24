@@ -44,6 +44,7 @@ const getInstance = async instanceID => {
   }
 }
 
+// TODO: Inconsistent behaviour (should throw error if instance does not exist)
 const deleteInstance = async instanceID => {
   const instance = await getInstance(instanceID)
   if (!instance) return false
@@ -62,6 +63,7 @@ const renameInstance = async (oldInstanceID, newInstanceID) => {
   }
 
   const newDirectory = await getInstanceDir(newInstanceID)
+  // TODO: Validate new instance name as a pathname
   await rename(instance.directory, newDirectory)
   return await getInstance(newInstanceID)
 }
