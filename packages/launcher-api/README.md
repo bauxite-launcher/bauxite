@@ -3,6 +3,36 @@
 > Provides config, data storage and high-level API for managing Minecraft client instances.
 > Designed to be consumed by `launcher-ui` and `launcher-cli`.
 
+## Table of Contents
+
+ - [Installation](#installation)
+ - [API Overview](#api-overview)
+    - [Managing Local Configuration Data](#managing-local-configuration-data)
+      - [`getConfiguration`](#getconfiguration-async)
+      - [`setConfiguration`](#setconfiguration-async)
+    - [Managing User Profiles](#managing-user-profiles)
+      - [`listProfiles`](#listprofiles-async)
+      - [`createProfile`](#createprofile-async)
+      - [`deleteProfile`](#deleteprofile-async)
+      - [`getAccessToken`](#getaccesstoken-async)
+      - [`getProfileByUsername`](#getprofilebyusername-async)
+      - [`getProfileByUUID`](#getprofilebyuuid-async)
+      - [`getProfileByName`](#getprofilebyname-async)
+      - [`getDefaultProfile`](#getdefaultprofile-async)
+      - [`setDefaultProfile`](#setdefaultprofile-async)
+    - [Minecraft Instance Management](#minecraft-instance-management)
+      - [`listInstances`](#listinstances-async)
+      - [`getInstance`](#getinstance-async)
+      - [`deleteInstance`](#deleteinstance-async)
+      - [`renameInstance`](#renameinstance-async)
+      - [`installInstance`](#installinstance-async)
+    - [Launching Minecraft Instances](#starting--stopping-minecraft-instances)
+      - [`startInstance`](#startinstance-async)
+      - [`stopInstance`](#stopinstance-async)
+      - [`getCurrentProcessIDForInstance`](#getcurrentprocessidforinstance-async)
+    - [Utilities](#utilities)
+      - [`getOperatingSystem`](#getoperatingsystem-sync)
+
 ## Installation
 
 ```bash
