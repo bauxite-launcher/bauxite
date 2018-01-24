@@ -32,6 +32,7 @@
       - [`getCurrentProcessIDForInstance`](#getcurrentprocessidforinstance-async)
     - [Utilities](#utilities)
       - [`getOperatingSystem`](#getoperatingsystem-sync)
+      - [`generateInstanceName`](#generateinstancename-sync)
 
 ## Installation
 
@@ -486,3 +487,7 @@ Returns one of:
  - `Windows`
  - `OSX`
  - `Linux`
+
+#### `generateInstanceName` _(sync)_
+
+Returns a randomly-generated instance name of the format `noun-adjective-XX`, where `noun` is the name of a mob from Minecraft, and `XX` is a random 2-digit number.

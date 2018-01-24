@@ -1,6 +1,10 @@
 {
   "name": "@bauxite/launcher-api",
   "version": "0.0.0",
+  "main": "./lib/index.js",
+  "author": {
+    "Jim O'Brien <bauxite@jimmed.net>"
+  },
   "scripts": {
     "test": "jest",
     "serve": "nodemon --ext js,graphql ./bin/serve.js"
