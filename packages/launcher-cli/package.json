@@ -1,11 +1,14 @@
 {
   "name": "@bauxite/launcher-cli",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.05e4b652",
   "dependencies": {
-    "@bauxite/launcher-api": "^0.0.0",
+    "@bauxite/launcher-api": "^0.1.0-alpha.05e4b652",
     "chalk": "^2.3.0",
     "inquirer": "^4.0.2",
     "tty-table": "^2.5.5",
     "yargs": "^10.0.3"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

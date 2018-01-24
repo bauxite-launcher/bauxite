@@ -1,6 +1,6 @@
 {
   "name": "@bauxite/minecraft-installer",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.05e4b652",
   "scripts": {
     "test": "jest"
   },
@@ -13,5 +13,8 @@
     "lodash": "^4.17.4",
     "make-fetch-happen": "^2.6.0",
     "progress-stream": "^2.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

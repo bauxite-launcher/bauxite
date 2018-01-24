@@ -1,6 +1,6 @@
 {
   "name": "@bauxite/minecraft-assets",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.05e4b652",
   "main": "index.js",
   "scripts": {
     "test": "jest",
@@ -18,5 +18,8 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "jest": "^21.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@bauxite/minecraft-instance",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.05e4b652",
   "scripts": {
     "test": "jest",
     "serve": "nodemon --ext js,graphql ./bin/serve.js"
@@ -22,5 +22,8 @@
     "express": "^4.16.2",
     "jest": "^22.0.3",
     "nodemon": "^1.14.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
