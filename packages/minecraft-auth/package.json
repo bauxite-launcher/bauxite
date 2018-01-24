@@ -1,6 +1,6 @@
 {
   "name": "@bauxite/minecraft-auth",
-  "version": "0.1.0-alpha.05e4b652",
+  "version": "0.1.0-alpha.c1dfbdc6",
   "main": "lib/index.js",
   "dependencies": {
     "node-fetch": "^1.7.3"

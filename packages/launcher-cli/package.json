@@ -1,8 +1,8 @@
 {
   "name": "@bauxite/launcher-cli",
-  "version": "0.1.0-alpha.05e4b652",
+  "version": "0.1.0-alpha.c1dfbdc6",
   "dependencies": {
-    "@bauxite/launcher-api": "^0.1.0-alpha.05e4b652",
+    "@bauxite/launcher-api": "^0.1.0-alpha.c1dfbdc6",
     "chalk": "^2.3.0",
     "inquirer": "^4.0.2",
     "tty-table": "^2.5.5",

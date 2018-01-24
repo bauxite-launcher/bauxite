@@ -1,6 +1,6 @@
 {
   "name": "@bauxite/minecraft-installer",
-  "version": "0.1.0-alpha.05e4b652",
+  "version": "0.1.0-alpha.c1dfbdc6",
   "scripts": {
     "test": "jest"
   },
