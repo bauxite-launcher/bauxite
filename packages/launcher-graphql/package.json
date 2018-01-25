@@ -1,6 +1,6 @@
 {
   "name": "@bauxite/launcher-graphql",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Jim O'Brien <bauxite@jimmed.net>",
   "scripts": {
     "serve": "nodemon --ext js,graphql ./bin/serve.js"
