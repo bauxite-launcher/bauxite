@@ -16,7 +16,12 @@ const {
   deleteInstance,
   renameInstance
 } = require('./instances');
-const { installInstance } = require('./install');
+const {
+  installInstance,
+  upgradeInstance,
+  cloneInstance,
+  backupInstance
+} = require('./install');
 const {
   startInstance,
   stopInstance,
@@ -42,6 +47,9 @@ module.exports = {
   deleteInstance,
   renameInstance,
   installInstance,
+  upgradeInstance,
+  cloneInstance,
+  backupInstance,
   startInstance,
   stopInstance,
   getCurrentProcessIDForInstance,
