@@ -1,6 +1,6 @@
 const path = require('path');
 const { debounce } = require('lodash');
-const { writeJSON, ensureDir } = require('fs-extra');
+const { writeJSON, ensureDir, copy } = require('fs-extra');
 const fetch = require('make-fetch-happen');
 const {
   createMinecraftInstance
@@ -112,7 +112,7 @@ const cloneInstance = async (instanceID, cloneInstanceID) => {
 
   const { directory: baseDirectory } = await getConfiguration();
   const clonedInstanceDirectory = path.join(
-    directory,
+    baseDirectory,
     'instances',
     cloneInstanceID
   );
@@ -122,6 +122,10 @@ const cloneInstance = async (instanceID, cloneInstanceID) => {
 };
 
 const backupInstance = async instanceID => {
+  const existingInstance = await getInstance(instanceID)
+  if (!existingInstance) {
+    throw new Error(`Instance "${instanceID}" does not exist`);
+  }
   const backupInstanceID = [
     instanceID,
     'backup',
