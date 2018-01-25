@@ -25,7 +25,7 @@ bauxite-gql
 ```
 
 This will launch a local HTTP server on port 2501, exposing a GraphQL endpoint
-at `/`. In order to inspect it, you will need an instance of GraphiQL, such as [ChromeiQL](https://chrome.google.com/webstore/detail/.../fkkiamalmpiidkljmicmjfbieiclmeij) or [graphiql-app](https://github.com/skevy/graphiql-app).
+at `/api`. It will also launch your default web browser with a GraphiQL user interface to allow you to interact with the underlying API.
 
 To override the default port, pass the `PORT` environment variable when launching:
 
