@@ -80,10 +80,18 @@ const installInstance = async (
   };
 };
 
-const upgradeInstance = async (instanceID, versionID, { backupFirst = true, ...installConfig } = {}) => {
+const upgradeInstance = async (
+  instanceID,
+  versionID,
+  { backupFirst = true, ...installConfig } = {}
+) => {
   const existingInstance = await getInstance(instanceID);
   if (!existingInstance) {
     throw new Error(`Instance "${instanceID}" does not exist`);
+  }
+
+  if (backupFirst) {
+    await backupInstance(instanceID);
   }
 
   return await installInstance(instanceID, versionID, {
@@ -99,15 +107,33 @@ const cloneInstance = async (instanceID, cloneInstanceID) => {
   }
   const existingTargetInstance = await getInstance(cloneInstanceID);
   if (existingTargetInstance) {
-    throw new Error(`Instance "${cloneInstanceID}" already exists`)
+    throw new Error(`Instance "${cloneInstanceID}" already exists`);
   }
 
-
   const { directory: baseDirectory } = await getConfiguration();
-  const clonedInstanceDirectory = path.join(directory, 'instances', cloneInstanceID);
-  await ensureDir(clonedInstanceDirectory)
-  await copy(existingInstance.directory, clonedInstanceDirectory)
-  return await getInstance(cloneInstanceID)
-}
+  const clonedInstanceDirectory = path.join(
+    directory,
+    'instances',
+    cloneInstanceID
+  );
+  await ensureDir(clonedInstanceDirectory);
+  await copy(existingInstance.directory, clonedInstanceDirectory);
+  return await getInstance(cloneInstanceID);
+};
 
-module.exports = { installInstance, upgradeInstance };
+const backupInstance = async instanceID => {
+  const backupInstanceID = [
+    instanceID,
+    'backup',
+    existingInstance.versionID,
+    new Date().toISOString()
+  ].join('-');
+  return await cloneInstance(instanceID, backupInstanceID);
+};
+
+module.exports = {
+  installInstance,
+  upgradeInstance,
+  cloneInstance,
+  backupInstance
+};
