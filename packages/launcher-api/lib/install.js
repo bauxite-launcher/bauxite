@@ -80,4 +80,34 @@ const installInstance = async (
   };
 };
 
-module.exports = { installInstance };
+const upgradeInstance = async (instanceID, versionID, { backupFirst = true, ...installConfig } = {}) => {
+  const existingInstance = await getInstance(instanceID);
+  if (!existingInstance) {
+    throw new Error(`Instance "${instanceID}" does not exist`);
+  }
+
+  return await installInstance(instanceID, versionID, {
+    ...installConfig,
+    overwrite: true
+  });
+};
+
+const cloneInstance = async (instanceID, cloneInstanceID) => {
+  const existingInstance = await getInstance(instanceID);
+  if (!existingInstance) {
+    throw new Error(`Instance "${instanceID}" does not exist`);
+  }
+  const existingTargetInstance = await getInstance(cloneInstanceID);
+  if (existingTargetInstance) {
+    throw new Error(`Instance "${cloneInstanceID}" already exists`)
+  }
+
+
+  const { directory: baseDirectory } = await getConfiguration();
+  const clonedInstanceDirectory = path.join(directory, 'instances', cloneInstanceID);
+  await ensureDir(clonedInstanceDirectory)
+  await copy(existingInstance.directory, clonedInstanceDirectory)
+  return await getInstance(cloneInstanceID)
+}
+
+module.exports = { installInstance, upgradeInstance };
