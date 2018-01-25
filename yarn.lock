@@ -10,6 +10,37 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
+"@bauxite/launcher-api@^0.1.0-alpha.e46bc55d":
+  version "0.1.0-alpha.e46bc55d"
+  resolved "https://registry.yarnpkg.com/@bauxite/launcher-api/-/launcher-api-0.1.0-alpha.e46bc55d.tgz#faf412a9a9223ab893ee15662e2eea6606d79368"
+  dependencies:
+    "@bauxite/minecraft-assets" "^0.1.0-alpha.e46bc55d"
+    "@bauxite/minecraft-installer" "^0.1.0-alpha.e46bc55d"
+    decompress "^4.2.0"
+    fs-extra "^5.0.0"
+    lodash "^4.17.4"
+    make-fetch-happen "^2.6.0"
+    ps-node "^0.1.6"
+
+"@bauxite/minecraft-assets@^0.1.0-alpha.e46bc55d":
+  version "0.1.0-alpha.e46bc55d"
+  resolved "https://registry.yarnpkg.com/@bauxite/minecraft-assets/-/minecraft-assets-0.1.0-alpha.e46bc55d.tgz#8c46b36374883e73b6b56fe834ebb33d0bc8c127"
+  dependencies:
+    graphql "^0.11.7"
+    graphql-iso-date "^3.3.0"
+    graphql-tools "^2.12.0"
+    lodash "^4.17.4"
+    make-fetch-happen "^2.6.0"
+
+"@bauxite/minecraft-installer@^0.1.0-alpha.e46bc55d":
+  version "0.1.0-alpha.e46bc55d"
+  resolved "https://registry.yarnpkg.com/@bauxite/minecraft-installer/-/minecraft-installer-0.1.0-alpha.e46bc55d.tgz#fc5a0ebc7a468657eee4e8b6f262e2b16718a2f4"
+  dependencies:
+    fs-extra "^5.0.0"
+    lodash "^4.17.4"
+    make-fetch-happen "^2.6.0"
+    progress-stream "^2.0.0"
+
 "@types/async@2.0.46":
   version "2.0.46"
   resolved "https://registry.yarnpkg.com/@types/async/-/async-2.0.46.tgz#f13a6c336a6582b95d0c0269e796b709488fd54d"

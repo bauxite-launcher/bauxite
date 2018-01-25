@@ -5,6 +5,7 @@
   "author": "Jim O'Brien <bauxite@jimmed.net>",
   "dependencies": {
     "@bauxite/minecraft-assets": "^0.1.0-alpha.c1dfbdc6",
+    "@bauxite/minecraft-auth": "^0.1.0-alpha.c1dfbdc6",
     "@bauxite/minecraft-installer": "^0.1.0-alpha.c1dfbdc6",
     "decompress": "^4.2.0",
     "fs-extra": "^5.0.0",
