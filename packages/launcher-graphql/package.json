@@ -3,7 +3,12 @@
   "version": "0.2.0",
   "author": "Jim O'Brien <bauxite@jimmed.net>",
   "scripts": {
-    "serve": "nodemon --ext js,graphql ./bin/serve.js"
+    "postinstall": "cd ../../node_modules/pkg && yarn run prepare && chmod +x ./lib-es5/bin.js",
+    "serve": "nodemon --ext js,graphql ./bin/serve.js",
+    "build:linux-x64": "../../node_modules/pkg/lib-es5/bin.js . -t node9-linux-x64 --output ./dist/bauxite-gql-linux-x64",
+    "build:freebsd-x64": "../../node_modules/pkg/lib-es5/bin.js . -t node9-freebsd-x64 --output ./dist/bauxite-gql-freebsd-x64",
+    "build:win-x64": "../../node_modules/pkg/lib-es5/bin.js . -t node9-win-x64 --output ./dist/bauxite-gql-win-x64",
+    "build:macos-x64": "../../node_modules/pkg/lib-es5/bin.js . -t node9-macos-x64 --output ./dist/bauxite-gql-macos-x64"
   },
   "bin": {
     "bauxite-gql": "./bin/serve.js"
@@ -19,7 +24,8 @@
     "open": "^0.0.5"
   },
   "devDependencies": {
-    "nodemon": "^1.14.7"
+    "nodemon": "^1.14.7",
+    "pkg": "https://github.com/kumi-health/pkg.git"
   },
   "publishConfig": {
     "access": "public"
