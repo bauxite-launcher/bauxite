@@ -2,7 +2,7 @@
 const express = require('express')
 const { graphqlExpress } = require('apollo-server-express')
 const bodyParser = require('body-parser')
-const { makeSchema } = require('../graphql/schema')
+const { makeSchema } = require('../lib/schema')
 
 const launchServer = async (port = 2501) => {
   const app = express()

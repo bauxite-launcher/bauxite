@@ -1,23 +1,22 @@
-const path = require('path')
-const { GraphQLDateTime } = require('graphql-iso-date')
-const { getConfiguration } = require('../lib/config')
+const path = require('path');
+const { GraphQLDateTime } = require('graphql-iso-date');
 const {
+  getConfiguration,
   listInstances,
   getInstance,
   deleteInstance,
-  renameInstance
-} = require('../lib/instances')
-const {
+  renameInstance,
   startInstance,
   stopInstance,
-  getCurrentProcessIDForInstance
-} = require('../lib/launch')
-const {
+  getCurrentProcessIDForInstance,
   listProfiles,
   createProfile,
-  deleteProfile
-} = require('../lib/profiles')
-const { installInstance } = require('../lib/install')
+  deleteProfile,
+  installInstance,
+  upgradeInstance,
+  cloneInstance,
+  backupInstance
+} = require('@bauxite/launcher-api');
 
 module.exports = {
   Query: {
@@ -27,22 +26,23 @@ module.exports = {
     profiles: listProfiles
   },
   Mutation: {
-    installInstance: async (root, { ID, version }) => {
-      return await installInstance(ID, version)
-    },
-    upgradeInstance: async (root, { ID, newVersion }) => {
-      throw new Error('Not yet implemented')
-    },
+    installInstance: async (root, { ID, version }) =>
+      await installInstance(ID, version),
+    upgradeInstance: async (root, { ID, newVersion, backupFirst }) =>
+      await upgradeInstance(ID, newVersion, { backupFirst }),
+    cloneInstance: async (root, { ID, newID }) =>
+      await cloneInstance(ID, newID),
+    backupInstance: async (root, { ID }) => await backupInstance(ID),
     deleteInstance: async (root, { ID }) => await deleteInstance(ID),
     renameInstance: async (root, { oldID, newID }) =>
       await renameInstance(oldID, newID),
     startInstance: async (root, { ID, username }) => {
-      await startInstance(ID, username)
-      return await getInstance(ID)
+      await startInstance(ID, username);
+      return await getInstance(ID);
     },
     stopInstance: async (root, { ID }) => {
-      await stopInstance(ID)
-      return await getInstance(ID)
+      await stopInstance(ID);
+      return await getInstance(ID);
     },
     createProfile: async (root, { username, password }) =>
       await createProfile(username, password),
@@ -52,4 +52,4 @@ module.exports = {
     processID: async ({ ID }) => await getCurrentProcessIDForInstance(ID)
   },
   DateTime: GraphQLDateTime
-}
+};
