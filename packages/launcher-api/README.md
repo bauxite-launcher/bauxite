@@ -26,6 +26,9 @@
       - [`deleteInstance`](#deleteinstance-async)
       - [`renameInstance`](#renameinstance-async)
       - [`installInstance`](#installinstance-async)
+      - [`upgradeInstance`](#upgradeinstance-async)
+      - [`cloneInstance`](#cloneinstance-async)
+      - [`backupInstance`](#backupinstance-async)
     - [Launching Minecraft Instances](#starting--stopping-minecraft-instances)
       - [`startInstance`](#startinstance-async)
       - [`stopInstance`](#stopinstance-async)
@@ -110,7 +113,7 @@ It is not possible to override the `directory` configuration item as yet ─ doi
 
 ##### Return value
 
-Returns an object containing the (entire) updated configuration data, identical to that of `getConfiguration`.
+Returns an object containing the (entire) updated configuration data, identical to that of [`getConfiguration`](#getconfiguration-async).
 
 ##### Example usage
 
@@ -175,7 +178,7 @@ Authenticates a Mojang account, and stores the associated profile for use in-gam
 
 ##### Return value
 
-Returns an object containing the profile data, equivalent to an element of the array returned by `listProfiles`.
+Returns an object containing the profile data, equivalent to an element of the array returned by [`listProfiles`](#listprofiles-async).
 
 The `isDefault` property will be true if there is not already a default profile selected.
 
@@ -251,7 +254,7 @@ Gets profile data for the supplied username
 
 ##### Return value
 
-A profile object, just like an element of the array returned by `listProfiles`.
+A profile object, just like an element of the array returned by [`listProfiles`](#listprofiles-async).
 
 ##### Example usage
 
@@ -265,19 +268,19 @@ console.log(`In-game name is "${name}"`)
 
 #### `getProfileByUUID` _(async)_
 
-Like `getProfileByUsername`, but accepting a profile's UUID as a parameter instead.
+Like [`getProfileByUsername`](#getprofilebyusername-async), but accepting a profile's UUID as a parameter instead.
 
 #### `getProfileByName` _(async)_
 
-Like `getProfileByUsername`, but accepting a profile's in-game name as a parameter instead.
+Like [`getProfileByUsername`](#getprofilebyusername-async), but accepting a profile's in-game name as a parameter instead.
 
 #### `getDefaultProfile` _(async)_
 
-Gets the default selected user profile
+Gets the default selected user profile.
 
 ##### Return value
 
-A profile object, just like an element of the array returned by `listProfiles`, where `isDefault` is `true`.
+A profile object, just like an element of the array returned by [`listProfiles`](#listprofiles-async), where `isDefault` is `true`.
 
 ##### Example usage
 
@@ -353,7 +356,7 @@ Gets details of a locally installed Minecraft instance by ID.
 
 ##### Return value
 
-An object representing the named instance, just like an element of the array returned by `listInstances`.
+An object representing the named instance, just like an element of the array returned by [`listInstances`](#listinstances-async).
 
 ##### Example usage
 
@@ -388,7 +391,7 @@ Renames (i.e. changes the ID of) an installed Minecraft instance, including rena
 
 ##### Return value
 
-An object representing the renamed instance, just like an element of the array returned by `listInstances`. The `ID` returned will be the `newInstanceID`.
+An object representing the renamed instance, just like an element of the array returned by [`listInstances`](#listinstances-async). The `ID` returned will be the `newInstanceID`.
 
 If the new chosen ID is already taken by another installed instance, an error will be thrown.
 
@@ -400,7 +403,7 @@ Installs an instance of the Minecraft locally.
 
 ##### Parameters
 
- - `inputInstanceID`: The ID of the instance to install. If omitted, a name will be generated at random.
+ - `inputInstanceID`: The ID of the instance to install. If omitted, a name will be generated at random using [`generateInstanceName`](#generateinstancename-sync).
  - `versionID`: The version of Minecraft to install. If omitted, the latest stable version will be selected.
  - `options`: An optional object with the following keys:
    - `onProgress`: An optional callback function which will be called with progress updates. See details below.
@@ -409,7 +412,7 @@ Installs an instance of the Minecraft locally.
 
 ##### Return value
 
-When the installation is complete, an object is returned representing the new instance. It looks just like an element of the array returned by `listInstances`.
+When the installation is complete, an object is returned representing the new instance. It looks just like an element of the array returned by  [`listInstances`](#listinstances-async).
 
 ##### `onProgress` callback
 
@@ -522,7 +525,7 @@ Starts a locally installed Minecraft instance.
 
 ##### Return value
 
-Returns an object containing data about the launched instance, like the return value of `getInstance`, with the addition of a `processID` field. This is an integer representing the launched Minecraft process's ID from the operating system.
+Returns an object containing data about the launched instance, like the return value of [`getInstance`](#getinstance-async), with the addition of a `processID` field. This is an integer representing the launched Minecraft process's ID from the operating system.
 
 If the instance is already running, an error will be thrown.
 
@@ -536,7 +539,7 @@ Forcibly stops a running Minecraft instance.
 
 ##### Return value
 
-Returns an object containing data about the stopped instance, like the return value of `getInstance`.
+Returns an object containing data about the stopped instance, like the return value of [`getInstance`](#getinstance-async).
 
 If this instance is not already running, an error will be thrown.
 
