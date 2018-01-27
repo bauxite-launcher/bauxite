@@ -4,6 +4,7 @@
   "dependencies": {
     "@bauxite/launcher-api": "^0.1.0",
     "chalk": "^2.3.0",
+    "cli-progress-bar": "^1.0.1",
     "inquirer": "^4.0.2",
     "tty-table": "^2.5.5",
     "yargs": "^10.0.3"
