@@ -1,11 +1,19 @@
 const path = require('path')
-const { readJSON, writeJSON } = require('fs-extra')
+const {
+  readJSON,
+  writeJSON,
+  ensureDir,
+  readFile,
+  writeFile,
+  pathExists
+} = require('fs-extra')
 const {
   authenticateUser,
   invalidateAccessToken,
   validateAccessToken,
   refreshAccessToken
 } = require('@bauxite/minecraft-auth')
+const fetch = require('node-fetch')
 const { getConfiguration, setConfiguration } = require('./config')
 
 const getProfilePath = async () => {
@@ -52,8 +60,19 @@ const createProfile = async (username, password) => {
     requestUser: true
   })
 
-  if (authResponse.clientToken !== clientToken) {
+  if (authResponse.clientToken && authResponse.clientToken !== clientToken) {
     await setConfiguration({ clientToken: authResponse.clientToken })
+  }
+
+  if (authResponse.error) {
+    throw new Error(authResponse.errorMessage)
+  }
+  if (!authResponse.selectedProfile) {
+    console.warn(
+      'Auth response did not contain a selected profile:\n\n',
+      JSON.stringify(authResponse, null, 2),
+      '\n'
+    )
   }
 
   const account = {
@@ -143,6 +162,30 @@ const getAccessToken = async username => {
   return accessToken
 }
 
+const getAvatarByUuid = async (uuid, { cache = true } = {}) => {
+  if (!uuid) {
+    throw new Error('')
+  }
+  const { directory: baseDirectory } = await getConfiguration()
+  const avatarDirectory = path.join(baseDirectory, 'avatars')
+  const avatarCachePath = path.join(avatarDirectory, `${uuid}.png`)
+  if (cache) {
+    await ensureDir(avatarDirectory)
+    if (await pathExists(avatarCachePath)) {
+      return await readFile(avatarCachePath)
+    }
+  }
+  const request = await fetch(
+    `https://crafatar.com/avatars/${uuid}?size=8&overlay`
+  )
+  const image = await request.buffer()
+
+  if (cache) {
+    await writeFile(avatarCachePath, image)
+  }
+  return image
+}
+
 module.exports = {
   listProfiles,
   createProfile,
@@ -152,5 +195,6 @@ module.exports = {
   getProfileByUUID,
   getProfileByName,
   getDefaultProfile,
-  setDefaultProfile
+  setDefaultProfile,
+  getAvatarByUuid
 }
