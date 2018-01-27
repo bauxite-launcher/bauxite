@@ -1,6 +1,10 @@
 {
   "name": "@bauxite/launcher-cli",
   "version": "0.3.0",
+  "bin": {
+    "bauxite": "./bin/cli.js",
+    "bx": "./bin/cli.js"
+  },
   "dependencies": {
     "@bauxite/launcher-api": "^0.3.0",
     "asciify-image": "^0.1.1",
