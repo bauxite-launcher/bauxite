@@ -1,13 +1,13 @@
-const { prompt } = require('inquirer');
-const ProgressBar = require('cli-progress-bar');
+const { prompt } = require('inquirer')
+const ProgressBar = require('cli-progress-bar')
 const {
   getMinecraftVersions
-} = require('@bauxite/minecraft-assets/lib/versions');
-const { installInstance } = require('@bauxite/launcher-api');
+} = require('@bauxite/minecraft-assets/lib/versions')
+const { installInstance } = require('@bauxite/launcher-api')
 
-exports.command = 'install [version] [name]';
-exports.aliases = 'i';
-exports.describe = 'Install an instance of Minecraft';
+exports.command = 'install [version] [name]'
+exports.aliases = 'i'
+exports.describe = 'Install an instance of Minecraft'
 exports.builder = yargs =>
   yargs
     .positional('version', {
@@ -17,39 +17,43 @@ exports.builder = yargs =>
     .positional('name', {
       describe: 'A unique name for the instance',
       type: 'string'
-    });
+    })
 
 exports.handler = async argv => {
-  const { name, version } = await interactivelyFillOptions(argv);
-  const bar = new ProgressBar();
+  const { name, version } = await interactivelyFillOptions(argv)
+  const bar = new ProgressBar()
   const newInstance = await installInstance(name || null, version, {
     onProgress: ({ percent }) =>
       bar.show(
         `Downloading Minecraft ${version}… (${percent.toFixed(0)}%)`,
         percent / 100
       )
-  });
-  console.log('Installed!', newInstance);
-};
+  })
+  bar.hide()
+  console.log('\n  Your new instance was installed successfully!\n')
+  console.log('    - Name:', newInstance.ID)
+  console.log('    - Minecraft Version:', newInstance.versionID)
+  console.log('    - Directory:', newInstance.directory, '\n')
+}
 
 const interactivelyFillOptions = async argv => {
-  const { versions, latest } = await getMinecraftVersions();
-  const latestVersionID = latest.Release.ID;
+  const { versions, latest } = await getMinecraftVersions()
+  const latestVersionID = latest.Release.ID
 
-  const options = { name: argv.name, version: argv.version };
-  let attempts = 0;
+  const options = { name: argv.name, version: argv.version }
+  let attempts = 0
   while (!optionsIsValid(options, versions)) {
     if (attempts++) {
-      console.warn(`There's something wrong with those options!`);
+      console.warn(`There's something wrong with those options!`)
       if (!versionIsValid(options.version, versions)) {
-        console.warn(` - "${options.version}" isn't a valid Minecraft version`);
+        console.warn(` - "${options.version}" isn't a valid Minecraft version`)
       }
       if (!nameIsValid(options.name)) {
         console.warn(
           ` - "${
             options.name
           }" is an invalid name. Valid characters are: 0-9 a-z _ -`
-        );
+        )
       }
     }
     Object.assign(
@@ -72,21 +76,21 @@ const interactivelyFillOptions = async argv => {
         },
         {
           name: 'name',
-          message: 'Optionally, pick a unique name to identifier this instance',
+          message: 'Optionally, pick a unique name for this instance:',
           type: 'input',
           when: !options.name || !nameIsValid(options.name)
         }
       ])
-    );
+    )
   }
-  return options;
-};
+  return options
+}
 
 const optionsIsValid = ({ name, version }, versions) => {
-  return nameIsValid(name) && versionIsValid(version, versions);
-};
+  return nameIsValid(name) && versionIsValid(version, versions)
+}
 
-const nameIsValid = name => !name || name.match(/^[a-z0-9_-]+$/i);
+const nameIsValid = name => !name || name.match(/^[a-z0-9_-]+$/i)
 
 const versionIsValid = (versionID, versions) =>
-  versionID && versions.find(({ ID }) => ID === versionID);
+  versionID && versions.find(({ ID }) => ID === versionID)

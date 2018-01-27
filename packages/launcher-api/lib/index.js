@@ -1,4 +1,4 @@
-const { getConfiguration, setConfiguration } = require('./config');
+const { getConfiguration, setConfiguration } = require('./config')
 const {
   listProfiles,
   createProfile,
@@ -8,27 +8,28 @@ const {
   getProfileByUUID,
   getProfileByName,
   getDefaultProfile,
-  setDefaultProfile
-} = require('./profiles');
+  setDefaultProfile,
+  getAvatarByUuid
+} = require('./profiles')
 const {
   listInstances,
   getInstance,
   deleteInstance,
   renameInstance
-} = require('./instances');
+} = require('./instances')
 const {
   installInstance,
   upgradeInstance,
   cloneInstance,
   backupInstance
-} = require('./install');
+} = require('./install')
 const {
   startInstance,
   stopInstance,
   getCurrentProcessIDForInstance
-} = require('./launch');
-const { getOperatingSystem } = require('./utils');
-const { generateInstanceName } = require('./instanceName');
+} = require('./launch')
+const { getOperatingSystem } = require('./utils')
+const { generateInstanceName } = require('./instanceName')
 
 module.exports = {
   getConfiguration,
@@ -42,6 +43,7 @@ module.exports = {
   getProfileByName,
   getDefaultProfile,
   setDefaultProfile,
+  getAvatarByUuid,
   listInstances,
   getInstance,
   deleteInstance,
@@ -55,4 +57,4 @@ module.exports = {
   getCurrentProcessIDForInstance,
   getOperatingSystem,
   generateInstanceName
-};
+}
