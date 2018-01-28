@@ -162,13 +162,16 @@ const getAccessToken = async username => {
   return accessToken
 }
 
-const getAvatarByUuid = async (uuid, { cache = true } = {}) => {
+const getAvatarByUuid = async (uuid, { cache = true, size = 8 } = {}) => {
   if (!uuid) {
-    throw new Error('')
+    throw new Error('You must specify a player UUID')
+  }
+  if (typeof size !== 'number' && size < 1) {
+    throw new Error('Size must be a number greater than zero')
   }
   const { directory: baseDirectory } = await getConfiguration()
   const avatarDirectory = path.join(baseDirectory, 'avatars')
-  const avatarCachePath = path.join(avatarDirectory, `${uuid}.png`)
+  const avatarCachePath = path.join(avatarDirectory, `${uuid}-${size}x${size}.png`)
   if (cache) {
     await ensureDir(avatarDirectory)
     if (await pathExists(avatarCachePath)) {
@@ -176,7 +179,7 @@ const getAvatarByUuid = async (uuid, { cache = true } = {}) => {
     }
   }
   const request = await fetch(
-    `https://crafatar.com/avatars/${uuid}?size=8&overlay`
+    `https://crafatar.com/avatars/${uuid}?size=${size}&overlay`
   )
   const image = await request.buffer()
 

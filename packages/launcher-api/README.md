@@ -20,6 +20,7 @@
       - [`getProfileByName`](#getprofilebyname-async)
       - [`getDefaultProfile`](#getdefaultprofile-async)
       - [`setDefaultProfile`](#setdefaultprofile-async)
+      - [`getAvatarByUuid`](#getavatarbyuuid-async)
     - [Minecraft Instance Management](#minecraft-instance-management)
       - [`listInstances`](#listinstances-async)
       - [`getInstance`](#getinstance-async)
@@ -305,6 +306,21 @@ Sets the default profile to use when launching the game.
 _Nothing. Zip. `undefined`._
 
 If the profile has not already been added, then an error will be thrown.
+
+#### `getAvatarByUuid` _async_
+
+Gets the user's avatar as a Buffer containing PNG image data. Uses API from [Crafatar](https://crafatar.com) to fetch images.
+
+##### Parameters
+
+ - `uuid`: The UUID of the player for which to fetch the avatar
+ - `options`: An optional object with the following properties:
+   - `cache`: If `true`, a caching layer will be used to speed up repeated calls. This is enabled by default.
+   - `size`: The pixel width/height (it's square) to render the avatar. Default is `8`, matching the actual size of the texture.
+
+##### Return value
+
+A `Buffer`, containing the image file in PNG format.
 
 ### Minecraft Instance Management
 
