@@ -332,7 +332,7 @@ Gets a list of locally installed Minecraft instances, based on the contents of t
 
 ##### Return value
 
-Returns an array of objects, each representing a locally installed Minecrat instance, looking something like:
+Returns an array of objects, each representing a locally installed Minecraft instance, looking something like:
 
 ```js
 [
