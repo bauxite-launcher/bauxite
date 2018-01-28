@@ -11,7 +11,11 @@
     "fs-extra": "^5.0.0",
     "lodash": "^4.17.4",
     "make-fetch-happen": "^2.6.0",
+    "optional-require": "^1.0.0",
     "ps-node": "^0.1.6"
+  },
+  "peerDependencies": {
+    "@bauxite/launcher-api-forge": "^0.1.0"
   },
   "publishConfig": {
     "access": "public"
