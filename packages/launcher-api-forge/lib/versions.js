@@ -21,13 +21,16 @@ const getForgeVersions = memoize(async () => {
       minecraftVersionID: mcversion,
       branch,
       releasedAt: parseDate(modified * 1000),
-      files: files.map(([extension, name, hash]) => ({
-        ID: `${build}-${name}`,
-        name,
-        extension,
-        hash,
-        URL: `${FORGE_MAVEN_URL}/${mcversion}-${version}/${mcversion}-${version}-${name}.${extension}`
-      })),
+      files: files.map(([extension, name, hash]) => {
+        const filePath = `${mcversion}-${version}-${name}.${extension}`
+        return {
+          ID: `${build}-${name}`,
+          name,
+          path: filePath,
+          sha1: hash,
+          url: `${FORGE_MAVEN_URL}/${mcversion}-${version}/${filePath}`
+        }
+      }),
       latest: promos[`${mcversion}-latest`] === build,
       recommended: promos[`${mcversion}-recommended`] === build
     })

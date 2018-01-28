@@ -7,6 +7,7 @@ const profilesResolvers = require('./profiles')
 const instancesResolvers = require('./instances')
 const launchResolvers = require('./launch')
 const versionsResolvers = require('./versions')
+const forgeResolvers = require('./forge')
 const pkg = require('../../package.json')
 const apiPkg = require('@bauxite/launcher-api/package.json')
 
@@ -28,5 +29,6 @@ module.exports = defaultsDeep(
   installResolvers,
   profilesResolvers,
   instancesResolvers,
-  versionsResolvers
+  versionsResolvers,
+  forgeResolvers
 )

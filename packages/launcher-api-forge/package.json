@@ -1,6 +1,6 @@
 {
   "name": "@bauxite/launcher-api-forge",
-  "version": "0.1.0",
+  "version": "0.4.0-alpha.a415ffc9",
   "main": "lib/index.js",
   "author": "Jim O'Brien <bauxite@jimmed.net>",
   "dependencies": {
@@ -8,5 +8,8 @@
     "decompress": "^4.2.0",
     "lodash": "^4.17.4",
     "node-fetch": "^1.7.3"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
