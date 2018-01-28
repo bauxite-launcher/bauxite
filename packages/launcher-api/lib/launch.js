@@ -3,9 +3,7 @@ const { spawn } = require('child_process')
 const { promisify } = require('util')
 const { kill, lookup } = require('ps-node')
 const { readFile, writeFile } = require('fs-extra')
-const {
-  getVersionManifestForVersion
-} = require('@bauxite/minecraft-assets/lib/version')
+const { getVersionManifest } = require('./versions')
 const { getInstance } = require('./instances')
 const { getProfileByUsername, getAccessToken } = require('./profiles')
 const { getOperatingSystem } = require('./utils')
@@ -69,7 +67,7 @@ const startInstance = async (instanceID, username) => {
 
   const instance = await getInstance(instanceID)
   const profile = await getProfileByUsername(username)
-  const version = await getVersionManifestForVersion(instance.versionID)
+  const version = await getVersionManifest(instance.versionID)
   const args = await generateLaunchArguments({ instance, profile, version })
 
   const client = spawn('/usr/bin/java', args, {
