@@ -28,6 +28,11 @@ const {
   stopInstance,
   getCurrentProcessIDForInstance
 } = require('./launch')
+const {
+  getMinecraftVersions,
+  getVersionManifest,
+  getAssetManifest
+} = require('./versions')
 const { getOperatingSystem, getInstalledPlugins } = require('./utils')
 const { generateInstanceName } = require('./instanceName')
 
@@ -56,9 +61,12 @@ const coreModules = {
   stopInstance,
   getCurrentProcessIDForInstance,
   getOperatingSystem,
+  getMinecraftVersions,
+  getVersionManifest,
+  getAssetManifest,
   generateInstanceName,
   getInstalledPlugins
-};
+}
 
 const plugins = getInstalledPlugins()
 

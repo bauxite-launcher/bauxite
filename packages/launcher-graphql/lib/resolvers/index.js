@@ -6,6 +6,7 @@ const installResolvers = require('./install')
 const profilesResolvers = require('./profiles')
 const instancesResolvers = require('./instances')
 const launchResolvers = require('./launch')
+const versionsResolvers = require('./versions')
 const pkg = require('../../package.json')
 const apiPkg = require('@bauxite/launcher-api/package.json')
 
@@ -16,7 +17,8 @@ const baseResolvers = {
   },
   Mutation: {
     ping: () => 'pong!'
-  }
+  },
+  DateTime: GraphQLDateTime
 }
 
 module.exports = defaultsDeep(
@@ -25,5 +27,6 @@ module.exports = defaultsDeep(
   configResolvers,
   installResolvers,
   profilesResolvers,
-  instancesResolvers
+  instancesResolvers,
+  versionsResolvers
 )
