@@ -1,0 +1,8 @@
+extend type Mutation {
+    installInstance(ID: ID, version: String!): MinecraftInstance!
+    upgradeInstance(
+        ID: ID!
+        newVersion: String!
+        backupFirst: Boolean = true
+    ): MinecraftInstance!
+}

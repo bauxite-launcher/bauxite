@@ -1,0 +1,18 @@
+extend type Query {
+    instances: [MinecraftInstance]
+    instance(ID: ID!): MinecraftInstance
+}
+
+extend type Mutation {
+    cloneInstance(ID: ID!, newID: ID!): MinecraftInstance!
+    backupInstance(ID: ID!): MinecraftInstance!
+    deleteInstance(ID: ID!): Boolean!
+    renameInstance(oldID: ID!, newID: ID!): MinecraftInstance!
+}
+
+type MinecraftInstance {
+    ID: ID!
+    directory: String!
+    versionID: String!
+    processID: Int
+}

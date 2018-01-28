@@ -1,0 +1,15 @@
+extend type Query {
+    profiles: [MinecraftProfile]
+}
+
+extend type Mutation {
+    createProfile(username: String!, password: String!): MinecraftProfile
+    deleteProfile(username: String!): Boolean!
+}
+
+type MinecraftProfile {
+    uuid: String!
+    username: String!
+    name: String!
+    accessToken: String!
+}
