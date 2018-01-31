@@ -10,9 +10,18 @@ extend type Mutation {
     renameInstance(oldID: ID!, newID: ID!): MinecraftInstance!
 }
 
-type MinecraftInstance {
+interface MinecraftInstance {
     ID: ID!
     directory: String!
     versionID: String!
+    version: MinecraftVersion
+    processID: Int
+}
+
+type VanillaMinecraftInstance implements MinecraftInstance {
+    ID: ID!
+    directory: String!
+    versionID: String!
+    version: MinecraftVersion
     processID: Int
 }

@@ -68,6 +68,6 @@ const coreModules = {
   getInstalledPlugins
 }
 
-const plugins = getInstalledPlugins()
+const installed = getInstalledPlugins()
 
-module.exports = { ...coreModules, ...plugins }
+module.exports = { ...coreModules, ...installed.plugins }

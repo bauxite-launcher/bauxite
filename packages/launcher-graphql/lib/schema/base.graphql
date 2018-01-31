@@ -3,6 +3,7 @@ scalar DateTime
 type Query {
     version: String
     apiVersion: String!
+    plugins: [String!]
 }
 
 type Mutation {

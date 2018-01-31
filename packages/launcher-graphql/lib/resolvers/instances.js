@@ -1,3 +1,5 @@
+const { typeNameResolverFromPlugins } = require('./utils')
+
 module.exports = {
   Query: {
     instances: async (root, args, { listInstances }) => await listInstances(),
@@ -12,5 +14,17 @@ module.exports = {
       await deleteInstance(ID),
     renameInstance: async (root, { oldID, newID }, { renameInstance }) =>
       await renameInstance(oldID, newID)
+  },
+  MinecraftInstance: {
+    __resolveType: typeNameResolverFromPlugins(
+      'MinecraftInstance',
+      'VanillaMinecraftInstance'
+    ),
+  },
+  VanillaMinecraftInstance: {
+    version: async ({ versionID }, args, { getMinecraftVersions }) => {
+      const { versions } = await getMinecraftVersions()
+      return versions.find(({ ID }) => ID === versionID)
+    }
   }
 }

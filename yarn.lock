@@ -10,6 +10,15 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
+"@bauxite/launcher-api-forge@^0.3.0":
+  version "0.4.0-alpha.6c187872"
+  resolved "https://registry.yarnpkg.com/@bauxite/launcher-api-forge/-/launcher-api-forge-0.4.0-alpha.6c187872.tgz#0fe88a070ff4ee46eeb7ef45a49b747b409a63b0"
+  dependencies:
+    date-fns "^1.29.0"
+    decompress "^4.2.0"
+    lodash "^4.17.4"
+    node-fetch "^1.7.3"
+
 "@types/async@2.0.46":
   version "2.0.46"
   resolved "https://registry.yarnpkg.com/@types/async/-/async-2.0.46.tgz#f13a6c336a6582b95d0c0269e796b709488fd54d"
@@ -257,7 +266,7 @@ apollo-server-core@^1.3.2:
     apollo-tracing "^0.1.0"
     graphql-extensions "^0.0.x"
 
-apollo-server-express@^1.2.0, apollo-server-express@^1.3.2:
+apollo-server-express@^1.3.2:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/apollo-server-express/-/apollo-server-express-1.3.2.tgz#0ff8201c0bf362804a151e1399767dae6ab7e309"
   dependencies:
@@ -1229,7 +1238,7 @@ bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.1.1, bn.js@^4.4.0:
   version "4.11.8"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.11.8.tgz#2cde09eb5ee341f484746bb0309b3253b1b1442f"
 
-body-parser@1.18.2, body-parser@^1.14.1, body-parser@^1.18.2:
+body-parser@1.18.2, body-parser@^1.14.1:
   version "1.18.2"
   resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.18.2.tgz#87678a19d84b47d859b83199bd59bce222b10454"
   dependencies:
@@ -3854,19 +3863,13 @@ graphql-tag@^2.4.2, graphql-tag@^2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.6.1.tgz#4788d509f6e29607d947fc47a40c4e18f736d34a"
 
-graphql-tools@^2.12.0, graphql-tools@^2.14.1:
+graphql-tools@^2.14.1:
   version "2.14.1"
   resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-2.14.1.tgz#15f96683d7f178042baddcfc17d73dcfeee67356"
   dependencies:
     apollo-utilities "^1.0.1"
     deprecated-decorator "^0.1.6"
     uuid "^3.1.0"
-
-graphql@^0.11.7:
-  version "0.11.7"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.11.7.tgz#e5abaa9cb7b7cccb84e9f0836bf4370d268750c6"
-  dependencies:
-    iterall "1.1.3"
 
 graphql@^0.12.3:
   version "0.12.3"

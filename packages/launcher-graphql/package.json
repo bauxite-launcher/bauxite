@@ -19,7 +19,8 @@
     "graphql-iso-date": "^3.3.0",
     "graphql-tools": "^2.14.1",
     "lodash": "^4.17.4",
-    "open": "^0.0.5"
+    "open": "^0.0.5",
+    "optional-require": "^1.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.14.7"

@@ -5,13 +5,14 @@ const getOperatingSystem = (platform = os.platform()) =>
   platform === 'win32' ? 'Windows' : platform === 'darwin' ? 'OSX' : 'Linux'
 
 const knownPlugins = ['forge']
-const installedPlugins = knownPlugins.reduce((plugins, name) => {
+const installedPlugins = knownPlugins.reduce((installed, name) => {
   const plugin = optionalRequire(`@bauxite/launcher-api-${name}`)
   if (plugin) {
-    plugins[name] = plugin
+    Object.assign(installed.plugins, plugin)
+    installed.names.push(name)
   }
-  return plugins
-}, {})
+  return installed
+}, { plugins: {}, names: []})
 
 const getInstalledPlugins = () => installedPlugins
 

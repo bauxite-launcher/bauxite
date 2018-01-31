@@ -1,0 +1,3 @@
+extend type Mutation {
+    installForge(instanceID: ID!, forgeVersionID: ID!): ForgeMinecraftInstance
+}

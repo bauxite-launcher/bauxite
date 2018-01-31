@@ -1,6 +1,14 @@
 extend type Query {
     forgeVersions(minecraftVersionID: String): [ForgeVersion!]
+    forgeVersion(ID: ID!): ForgeVersion
 }
+
+extend type MinecraftVersion {
+    recommendedForgeVersion: ForgeVersion
+    latestForgeVersion: ForgeVersion
+    forgeVersions: [ForgeVersion!]
+}
+
 
 type ForgeVersion {
     ID: ID!
@@ -9,9 +17,10 @@ type ForgeVersion {
     minecraftVersion: MinecraftVersion
     branch: String
     releasedAt: DateTime
-    downloads: [ForgeDownload]!
     latest: Boolean
     recommended: Boolean
+    downloads: [ForgeDownload]!
+    download(name: String!): ForgeDownload
 }
 
 type ForgeDownload {

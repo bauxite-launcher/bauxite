@@ -4,12 +4,18 @@ const {
   getForgeVersionsForMinecraftVersion
 } = require('./versions')
 const { getForgeInstanceManifest } = require('./libraries')
-const { installForge } = require('./install')
+const {
+  installForge,
+  downloadForge,
+  installForgeLibraries
+} = require('./install')
 
 module.exports = {
   getForgeVersions,
   getForgeVersionByID,
   getForgeVersionsForMinecraftVersion,
   getForgeInstanceManifest,
-  installForge
+  installForge,
+  downloadForge,
+  installForgeLibraries
 }

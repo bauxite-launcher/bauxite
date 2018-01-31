@@ -21,8 +21,8 @@ const getForgeVersions = memoize(async () => {
       minecraftVersionID: mcversion,
       branch,
       releasedAt: parseDate(modified * 1000),
-      files: files.map(([extension, name, hash]) => {
-        const filePath = `${mcversion}-${version}-${name}.${extension}`
+      downloads: files.map(([extension, name, hash]) => {
+        const filePath = `forge-${mcversion}-${version}-${name}.${extension}`
         return {
           ID: `${build}-${name}`,
           name,
