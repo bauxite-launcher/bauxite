@@ -3,17 +3,45 @@ const { spawn } = require('child_process')
 const { promisify } = require('util')
 const { kill, lookup } = require('ps-node')
 const { readFile, writeFile } = require('fs-extra')
-const {
-  getVersionManifestForVersion
-} = require('@bauxite/minecraft-assets/lib/version')
+const { getVersionManifest } = require('./versions')
 const { getInstance } = require('./instances')
 const { getProfileByUsername, getAccessToken } = require('./profiles')
-const { getOperatingSystem } = require('./utils')
+const { getOperatingSystem, getInstalledPlugins } = require('./utils')
 
 const killProcess = promisify(kill)
 const lookupProcess = promisify(lookup)
 
-const generateLaunchArguments = async ({ instance, profile, version }) => {
+// TODO: Plugin API refactor, register overrides from inside plugin code
+const pluginMap = {
+  forge: {
+    generateLaunchArguments: 'generateForgeLaunchArguments',
+    instanceSupported: ({ forgeVersionID }) => forgeVersionID
+  }
+}
+
+const generateLaunchArguments = async ({ instance, ...rest }) => {
+  const { plugins, names } = getInstalledPlugins()
+  // TODO: Refactor into some `getPluginOverridesForMethod` thing
+  const [supportedPlugin] = names
+    .map(name => pluginMap[name])
+    .filter(
+      plugin => (
+        console.log(plugin),
+        plugin &&
+          plugin.generateLaunchArguments &&
+          plugins[plugin.generateLaunchArguments] &&
+          plugin.instanceSupported(instance)
+      )
+    )
+
+  const generateArguments = supportedPlugin
+    ? plugins[supportedPlugin.generateLaunchArguments]
+    : generateVanillaLaunchArguments
+
+  return await generateArguments({ instance, ...rest })
+}
+
+const generateVanillaLaunchArguments = ({ instance, profile, version }) => {
   const relativeDirectory = dir => path.join(instance.directory, dir)
 
   const jarArgMap = {
@@ -69,12 +97,12 @@ const startInstance = async (instanceID, username) => {
 
   const instance = await getInstance(instanceID)
   const profile = await getProfileByUsername(username)
-  const version = await getVersionManifestForVersion(instance.versionID)
+  const version = await getVersionManifest(instance.versionID)
   const args = await generateLaunchArguments({ instance, profile, version })
 
-  const client = spawn('/usr/bin/java', args, {
+  const client = spawn('java', args, {
     cwd: instance.directory,
-    stdio: 'ignore',
+    stdio: 'none',
     detached: true
   })
 

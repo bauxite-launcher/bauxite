@@ -28,10 +28,15 @@ const {
   stopInstance,
   getCurrentProcessIDForInstance
 } = require('./launch')
-const { getOperatingSystem } = require('./utils')
+const {
+  getMinecraftVersions,
+  getVersionManifest,
+  getAssetManifest
+} = require('./versions')
+const { getOperatingSystem, getInstalledPlugins } = require('./utils')
 const { generateInstanceName } = require('./instanceName')
 
-module.exports = {
+const coreModules = {
   getConfiguration,
   setConfiguration,
   listProfiles,
@@ -56,5 +61,13 @@ module.exports = {
   stopInstance,
   getCurrentProcessIDForInstance,
   getOperatingSystem,
-  generateInstanceName
+  getMinecraftVersions,
+  getVersionManifest,
+  getAssetManifest,
+  generateInstanceName,
+  getInstalledPlugins
 }
+
+const installed = getInstalledPlugins()
+
+module.exports = { ...coreModules, ...installed.plugins }

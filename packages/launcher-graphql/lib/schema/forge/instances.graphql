@@ -1,0 +1,9 @@
+type ForgeMinecraftInstance implements MinecraftInstance {
+    ID: ID!
+    directory: String!
+    versionID: String!
+    version: MinecraftVersion!
+    processID: Int
+    forgeVersionID: String!
+    forgeVersion: ForgeVersion!
+}

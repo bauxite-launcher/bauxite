@@ -1,4 +1,13 @@
-scalar DateTime
+extend type Query {
+  # Finds all Minecraft versions, optionally filtered by one or more release types
+  minecraftVersions(releaseTypes: [MinecraftReleaseType]): [MinecraftVersion]!
+  # Finds a specific version of Minecraft
+  minecraftVersion(ID: ID!): MinecraftVersion
+  # Returns the latest Minecraft version for a given release type (only for Release or Snapshot)
+  latestMinecraftVersion(
+    releaseType: MinecraftReleaseType = Release
+  ): MinecraftVersion!
+}
 
 # The kinds of vanilla Minecraft releases
 enum MinecraftReleaseType {
@@ -114,15 +123,4 @@ type MinecraftVersionAssets {
   totalSize: Int!
   # The assets listed in the manifest
   downloads: [MinecraftDownload]!
-}
-
-type Query {
-  # Finds all Minecraft versions, optionally filtered by one or more release types
-  minecraftVersions(releaseTypes: [MinecraftReleaseType]): [MinecraftVersion]!
-  # Finds a specific version of Minecraft
-  minecraftVersion(ID: ID!): MinecraftVersion
-  # Returns the latest Minecraft version for a given release type (only for Release or Snapshot)
-  latestMinecraftVersion(
-    releaseType: MinecraftReleaseType = Release
-  ): MinecraftVersion!
 }

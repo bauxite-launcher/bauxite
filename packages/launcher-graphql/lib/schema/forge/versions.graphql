@@ -1,0 +1,32 @@
+extend type Query {
+    forgeVersions(minecraftVersionID: String): [ForgeVersion!]
+    forgeVersion(ID: ID!): ForgeVersion
+}
+
+extend type MinecraftVersion {
+    recommendedForgeVersion: ForgeVersion
+    latestForgeVersion: ForgeVersion
+    forgeVersions: [ForgeVersion!]
+}
+
+
+type ForgeVersion {
+    ID: ID!
+    build: Int!
+    minecraftVersionID: String!
+    minecraftVersion: MinecraftVersion
+    branch: String
+    releasedAt: DateTime
+    latest: Boolean
+    recommended: Boolean
+    downloads: [ForgeDownload]!
+    download(name: String!): ForgeDownload
+}
+
+type ForgeDownload {
+    ID: ID!
+    name: String!
+    path: String!
+    sha1: String!
+    url: String!
+}

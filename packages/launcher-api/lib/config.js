@@ -4,6 +4,8 @@ const { memoize } = require('lodash')
 const { readJSON, writeJSON, ensureDir } = require('fs-extra')
 const pkg = require('../package.json')
 
+const CONFIG_FILE = 'config.json'
+
 // Based on https://stackoverflow.com/a/26227660/801702
 const getBaseDirectory = memoize(() => {
   if (process.env.APPDATA) {
@@ -20,26 +22,34 @@ const getBaseDirectory = memoize(() => {
   return path.join(homedir(), '.bauxite')
 })
 
-const getConfigurationFile = async directory =>
-  await readJSON(path.join(directory, 'config.json'))
-
-const setConfigurationFile = async (directory, config) => {
-  await ensureDir(directory)
-  await writeJSON(path.join(directory, 'config.json'), config)
+const configFileCache = {
+  dirty: false,
+  cache: null
 }
 
-const defaultConfig = () => {}
-const managedBy = { name: pkg.name, version: pkg.version }
+const getConfigurationFile = async directory =>
+  configFileCache.cache || (await readJSON(path.join(directory, CONFIG_FILE)))
+
+const setConfigurationFile = async (directory, config) => {
+  if ((configFileCache.dirty = true)) {
+    throw new Error('Attempt to write configuration file in parallel!')
+  }
+  configFileCache.cache = config
+  configFileCache.dirty = true
+  await ensureDir(directory)
+  await writeJSON(path.join(directory, CONFIG_FILE), config)
+  configFileCache.dirty = false
+}
+
+const defaultConfig = () => ({
+  directory: getBaseDirectory(),
+  managedBy: { name: pkg.name, version: pkg.version }
+})
 
 const getConfiguration = async () => {
-  const directory = getBaseDirectory()
-  const baseConfig = {
-    directory,
-    ...defaultConfig(),
-    managedBy
-  }
+  const baseConfig = defaultConfig()
   try {
-    const config = await getConfigurationFile(directory)
+    const config = await getConfigurationFile(baseConfig.directory)
     return {
       ...baseConfig,
       ...config

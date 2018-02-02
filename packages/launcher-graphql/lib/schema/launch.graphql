@@ -1,0 +1,4 @@
+extend type Mutation {
+    startInstance(ID: ID!, username: String!): MinecraftInstance
+    stopInstance(ID: ID!): MinecraftInstance
+}

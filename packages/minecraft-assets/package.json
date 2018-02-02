@@ -1,22 +1,15 @@
 {
   "name": "@bauxite/minecraft-assets",
-  "version": "0.1.0",
-  "main": "index.js",
+  "version": "0.4.0-alpha.a415ffc9",
+  "main": "./lib/index.js",
   "scripts": {
-    "test": "jest",
-    "serve": "./bin/serve.js"
+    "test": "jest"
   },
   "dependencies": {
-    "graphql": "^0.11.7",
-    "graphql-iso-date": "^3.3.0",
-    "graphql-tools": "^2.12.0",
     "lodash": "^4.17.4",
     "make-fetch-happen": "^2.6.0"
   },
   "devDependencies": {
-    "apollo-server-express": "^1.2.0",
-    "body-parser": "^1.18.2",
-    "express": "^4.16.2",
     "jest": "^21.2.1"
   },
   "publishConfig": {

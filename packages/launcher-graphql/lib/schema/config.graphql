@@ -1,0 +1,25 @@
+extend type Query {
+    configuration: BauxiteConfiguration!
+}
+
+extend type Mutation {
+    updateConfiguration(
+        changes: BauxiteConfigurationInput!
+    ): BauxiteConfiguration!
+}
+
+type BauxiteConfiguration {
+    directory: String!
+    clientToken: String
+    managedBy: BauxiteVersion!
+}
+
+type BauxiteVersion {
+    name: String!
+    version: String!
+}
+
+# There's nothing to set here yet, but when there is, this will have keys
+input BauxiteConfigurationInput {
+    dummy: String
+}
