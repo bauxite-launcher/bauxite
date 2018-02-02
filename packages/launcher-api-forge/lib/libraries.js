@@ -25,15 +25,16 @@ const getForgeInstanceManifest = async forgeJar => {
   try {
     return JSON.parse(manifestFile.data.toString('utf8'))
   } catch (error) {
-    throw new Error(`Could not parse version data from ${forgeJar}`)
+    throw new Error(`Could not parse JSON version data from ${forgeJar}`)
   }
-
-  return manifestFile
 }
 
+// TODO: Rename this; not just libraries any more
 const getForgeLibraries = async forgeJar => {
-  const { libraries } = await getForgeInstanceManifest(forgeJar)
-  return libraries
+  const { minecraftArguments, mainClass, libraries } = await getForgeInstanceManifest(
+    forgeJar
+  )
+  const formattedLibraries = libraries
     .map(library => {
       const {
         name,
@@ -55,23 +56,30 @@ const getForgeLibraries = async forgeJar => {
         url: `${url}${isForge ? '.pack.xz' : ''}`,
         hash: sha1,
         compressed: isForge,
-        path
+        path: `${path}${isForge ? '.pack.xz' : ''}`
       }
       if (isForge) {
         formattedLibrary.fallbackUrl = url
+        formattedLibrary.fallbackPath = path
       }
       return formattedLibrary
     })
     .filter(({ name }) => name !== 'net.minecraftforge.forge')
+
+  return {
+    clientArguments: minecraftArguments,
+    clientMainClass: mainClass,
+    libraries: formattedLibraries
+  }
 }
 
 const getForgeClientLibraries = async forgeJar => {
-  const libraries = await getForgeLibraries(forgeJar)
+  const { libraries } = await getForgeLibraries(forgeJar)
   return libraries.filter(({ client }) => client)
 }
 
 const getForgeServerLibraries = async forgeJar => {
-  const libraries = await getForgeLibraries(forgeJar)
+  const { libraries } = await getForgeLibraries(forgeJar)
   return libraries.filter(({ server }) => server)
 }
 

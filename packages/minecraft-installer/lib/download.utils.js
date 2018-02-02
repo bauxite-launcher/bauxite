@@ -108,5 +108,6 @@ module.exports = {
   createDownloadStream,
   downloadToFile,
   downloadManyFiles,
-  downloadPreflightCheck
+  downloadPreflightCheck,
+  streamCompleted
 }

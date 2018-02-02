@@ -15,7 +15,8 @@ const schemata = [
   'install',
   'profiles',
   'instances',
-  'versions'
+  'versions',
+  'launch'
 ]
 
 const getSchemata = async schemata => Promise.all(schemata.map(readSchema))
