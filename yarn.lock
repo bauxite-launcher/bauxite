@@ -10,30 +10,6 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-"@bauxite/launcher-api-forge@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@bauxite/launcher-api-forge/-/launcher-api-forge-0.4.0.tgz#bee32cb6a79b465f7282272159c6caadae40de3b"
-  dependencies:
-    date-fns "^1.29.0"
-    decompress "^4.2.0"
-    fs-extra "^5.0.0"
-    lodash "^4.17.4"
-    node-fetch "^1.7.3"
-    xz "^1.2.2"
-
-"@bauxite/minecraft-assets@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@bauxite/minecraft-assets/-/minecraft-assets-0.4.0.tgz#c3dfa53f03887c8121cac3098867e0c42f360c30"
-  dependencies:
-    lodash "^4.17.4"
-    make-fetch-happen "^2.6.0"
-
-"@bauxite/minecraft-auth@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@bauxite/minecraft-auth/-/minecraft-auth-0.4.0.tgz#9ac3c300736146f4ff5766eed5a4b3e0a1652656"
-  dependencies:
-    node-fetch "^1.7.3"
-
 "@types/async@2.0.47":
   version "2.0.47"
   resolved "https://registry.yarnpkg.com/@types/async/-/async-2.0.47.tgz#f49ba1dd1f189486beb6e1d070a850f6ab4bd521"
