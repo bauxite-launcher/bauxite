@@ -1,6 +1,6 @@
 {
   "name": "@bauxite/launcher-api",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "main": "./lib/index.js",
   "author": "Jim O'Brien <bauxite@jimmed.net>",
   "dependencies": {
