@@ -24,7 +24,7 @@ const getForgeVersions = memoize(async () => {
       downloads: files.map(([extension, name, hash]) => {
         const filePath = `forge-${mcversion}-${version}-${name}.${extension}`
         return {
-          ID: `${build}-${name}`,
+          ID: `${version}-${name}`,
           name,
           path: filePath,
           sha1: hash,

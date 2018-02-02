@@ -133,7 +133,8 @@ const extractCompressedLibraries = async (directory, libraries) =>
 
 const extractLibrary = async (
   directory,
-  { path: libraryPath, fallbackPath }
+  { path: libraryPath, fallbackPath },
+  { deleteAfter = true } = {}
 ) => {
   const decompression = new LzmaDecompressor()
   const compressedPath = path.join(directory, libraryPath)
@@ -142,7 +143,9 @@ const extractLibrary = async (
   const extractedFile = createWriteStream(extractedPath)
   compressedFile.pipe(decompression).pipe(extractedFile)
   await streamCompleted(extractedFile)
-  await remove(compressedPath)
+  if (deleteAfter) {
+    await remove(compressedPath)
+  }
 }
 
-module.exports = { downloadForge, installForge }
+module.exports = { installForge }

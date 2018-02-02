@@ -6,8 +6,6 @@ const {
 const { getForgeInstanceManifest } = require('./libraries')
 const {
   installForge,
-  downloadForge,
-  installForgeLibraries
 } = require('./install')
 const {
   generateForgeLaunchArguments
@@ -19,7 +17,5 @@ module.exports = {
   getForgeVersionsForMinecraftVersion,
   getForgeInstanceManifest,
   installForge,
-  downloadForge,
-  installForgeLibraries,
   generateForgeLaunchArguments
 }
