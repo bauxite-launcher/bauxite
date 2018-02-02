@@ -1,6 +1,6 @@
 {
   "name": "@bauxite/minecraft-world",
-  "version": "0.4.0-alpha.a415ffc9",
+  "version": "0.4.0",
   "scripts": {
     "test": "jest",
     "serve": "nodemon --ext js,graphql ./bin/serve.js"
