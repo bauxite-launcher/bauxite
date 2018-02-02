@@ -4,21 +4,22 @@
 
 ## Repositories
 
-| Name                                                  | Description                                          |
-| :---------------------------------------------------- | :--------------------------------------------------- |
-| [launcher-electron](./packages/launcher-electron)     | Electron wrapper for launcher-ui and launcher-api    |
-| [minecraft-auth](./packages/minecraft-auth)           | Authentication layer for Mojang API                  |
-| [minecraft-assets](./packages/minecraft-assets)       | Assets API layer for Minecraft                       |
-| [minecraft-installer](./packages/minecraft-installer) | Utilities for installing and upgrading minecraft     |
-| [minecraft-client](./packages/minecraft-client)       | API for launching Minecraft client                   |
-| [launcher-api](./packages/launcher-api)               | Installs/launches Minecraft client instances locally |
-| [launcher-ui](./packages/launcher-ui)                 | User interface for launcher API                      |
-| [minecraft-world](./packages/minecraft-world)         | API for Minecraft world data                         |
+| Name                                                  | Description                                                   |
+|:------------------------------------------------------|:--------------------------------------------------------------|
+| [launcher-api](./packages/launcher-api)               | Installs/launches Minecraft client instances locally          |
+| [launcher-api-forge](./packages/launcher-api)         | Installs/launches Minecraft Forge client instances locally    |
+| [minecraft-auth](./packages/minecraft-auth)           | Authentication layer for Mojang API                           |
+| [minecraft-assets](./packages/minecraft-assets)       | Assets API layer for Minecraft                                |
+| [minecraft-installer](./packages/minecraft-installer) | Utilities for installing and upgrading minecraft              |
+| [launcher-cli](./packages/launcher-cli)               | Command-line for managing/launching local Minecraft instances |
+| [launcher-graphql](./packages/launcher-graphql)       | GraphQL interface to launcher-api                             |
 
 ## High-level Roadmap
 
-* [ ] Local client launcher
-* [ ] Local server launcher
-* [ ] Remote server management
-* [ ] Forge integration
-* [ ] CurseForge integration
+* [x] Local client CLI launcher
+  * [x] Forge integration
+  * [ ] CurseForge integration
+  * [ ] Remote server management in local client
+* [ ] Local server CLI launcher
+  * [ ] Forge integration
+  * [ ] CurseForge integration
