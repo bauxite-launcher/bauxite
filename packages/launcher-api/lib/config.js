@@ -31,7 +31,7 @@ const getConfigurationFile = async directory =>
   configFileCache.cache || (await readJSON(path.join(directory, CONFIG_FILE)))
 
 const setConfigurationFile = async (directory, config) => {
-  if ((configFileCache.dirty = true)) {
+  if (configFileCache.dirty) {
     throw new Error('Attempt to write configuration file in parallel!')
   }
   configFileCache.cache = config
@@ -73,7 +73,7 @@ const setConfiguration = async ({ directory, ...configChanges } = {}) => {
     ...defaultConfig(),
     ...currentConfiguration,
     ...configChanges,
-    managedBy
+    managedBy: { name: pkg.name, version: pkg.version }
   }
 
   await setConfigurationFile(currentConfiguration.directory, newConfiguration)
