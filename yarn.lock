@@ -21,20 +21,6 @@
     node-fetch "^1.7.3"
     xz "^1.2.2"
 
-"@bauxite/launcher-api@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@bauxite/launcher-api/-/launcher-api-0.4.0.tgz#e6370ae5b93d61d81e8df4af8da8e2411eec88b6"
-  dependencies:
-    "@bauxite/minecraft-assets" "^0.4.0"
-    "@bauxite/minecraft-auth" "^0.4.0"
-    "@bauxite/minecraft-installer" "^0.4.0"
-    decompress "^4.2.0"
-    fs-extra "^5.0.0"
-    lodash "^4.17.4"
-    make-fetch-happen "^2.6.0"
-    optional-require "^1.0.0"
-    ps-node "^0.1.6"
-
 "@bauxite/minecraft-assets@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@bauxite/minecraft-assets/-/minecraft-assets-0.4.0.tgz#c3dfa53f03887c8121cac3098867e0c42f360c30"
@@ -47,15 +33,6 @@
   resolved "https://registry.yarnpkg.com/@bauxite/minecraft-auth/-/minecraft-auth-0.4.0.tgz#9ac3c300736146f4ff5766eed5a4b3e0a1652656"
   dependencies:
     node-fetch "^1.7.3"
-
-"@bauxite/minecraft-installer@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@bauxite/minecraft-installer/-/minecraft-installer-0.4.0.tgz#5433685e40d3ae911eae9283cda3d15e44e97127"
-  dependencies:
-    fs-extra "^5.0.0"
-    lodash "^4.17.4"
-    make-fetch-happen "^2.6.0"
-    progress-stream "^2.0.0"
 
 "@types/async@2.0.47":
   version "2.0.47"

@@ -2,7 +2,8 @@ const {
   listProfiles,
   createProfile,
   deleteProfile,
-  getAvatarByUuid
+  getAvatarByUuid,
+  getInstalledPlugins
 } = require('@bauxite/launcher-api')
 const ora = require('ora')
 const { prompt, Separator } = require('inquirer')
