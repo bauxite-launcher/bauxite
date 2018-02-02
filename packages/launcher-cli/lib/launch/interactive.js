@@ -17,6 +17,14 @@ const launchMenu = async exitAfter => {
   spinner.stop()
   if (!instances.length) return exitAfter()
 
+  const profileSpinner = ora(`Getting default profile`).start()
+  const profile = await getDefaultProfile()
+  profileSpinner.stop()
+  if (!profile) {
+    console.log('You must be logged in to launch Minecraft.')
+    return exitAfter()
+  }
+
   const { instance } = await prompt([
     {
       type: 'list',
@@ -35,14 +43,11 @@ const launchMenu = async exitAfter => {
   if (instance.goBack) {
     return exitAfter()
   } else {
-    return await launchInstance(instance)
+    return await launchInstance(instance, profile)
   }
 }
 
-const launchInstance = async instance => {
-  const profileSpinner = ora(`Getting default profile`).start()
-  const profile = await getDefaultProfile()
-  profileSpinner.stop()
+const launchInstance = async (instance, profile) => {
   const launchSpinner = ora(
     `Starting "${instance.ID}" (Minecraft ${instance.versionID})`
   ).start()
