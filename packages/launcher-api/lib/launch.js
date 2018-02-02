@@ -25,13 +25,11 @@ const generateLaunchArguments = async ({ instance, ...rest }) => {
   const [supportedPlugin] = names
     .map(name => pluginMap[name])
     .filter(
-      plugin => (
-        console.log(plugin),
+      plugin =>
         plugin &&
-          plugin.generateLaunchArguments &&
-          plugins[plugin.generateLaunchArguments] &&
-          plugin.instanceSupported(instance)
-      )
+        plugin.generateLaunchArguments &&
+        plugins[plugin.generateLaunchArguments] &&
+        plugin.instanceSupported(instance)
     )
 
   const generateArguments = supportedPlugin
@@ -102,7 +100,7 @@ const startInstance = async (instanceID, username) => {
 
   const client = spawn('java', args, {
     cwd: instance.directory,
-    stdio: 'none',
+    stdio: 'ignore',
     detached: true
   })
 

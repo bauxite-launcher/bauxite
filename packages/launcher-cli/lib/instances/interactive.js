@@ -176,11 +176,17 @@ const installForgeMenu = async (exitAfter, instance) => {
     `Downloading and installing Forge ${forgeVersionID}`
   ).start()
   try {
-    await installForge(instance.directory, forgeVersionID)
+    const updatedInstance = await installForge(
+      instance.directory,
+      forgeVersionID
+    )
     installSpinner.succeed(`Installed Forge ${forgeVersionID}!`)
+    await menuLoop(manageInstance, updatedInstance)
   } catch (error) {
     console.error(error.stack || error)
     installSpinner.fail(`Failed to install ${forgeVersionID}`)
   }
+
   exitAfter()
+  return true
 }
