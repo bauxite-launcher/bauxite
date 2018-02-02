@@ -1,12 +1,12 @@
 {
   "name": "@bauxite/launcher-api",
-  "version": "0.4.0-alpha.a415ffc9",
+  "version": "0.4.0",
   "main": "./lib/index.js",
   "author": "Jim O'Brien <bauxite@jimmed.net>",
   "dependencies": {
-    "@bauxite/minecraft-assets": "^0.4.0-alpha.a415ffc9",
-    "@bauxite/minecraft-auth": "^0.4.0-alpha.a415ffc9",
-    "@bauxite/minecraft-installer": "^0.4.0-alpha.a415ffc9",
+    "@bauxite/minecraft-assets": "^0.4.0",
+    "@bauxite/minecraft-auth": "^0.4.0",
+    "@bauxite/minecraft-installer": "^0.4.0",
     "decompress": "^4.2.0",
     "fs-extra": "^5.0.0",
     "lodash": "^4.17.4",
