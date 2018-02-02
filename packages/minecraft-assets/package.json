@@ -1,6 +1,6 @@
 {
   "name": "@bauxite/minecraft-assets",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "main": "./lib/index.js",
   "scripts": {
     "test": "jest"

@@ -1,6 +1,6 @@
 {
   "name": "@bauxite/minecraft-instance",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "scripts": {
     "test": "jest",
     "serve": "nodemon --ext js,graphql ./bin/serve.js"
