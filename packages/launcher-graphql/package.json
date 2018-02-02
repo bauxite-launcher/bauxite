@@ -10,8 +10,8 @@
     "bauxite-gql": "./bin/serve.js"
   },
   "dependencies": {
-    "@bauxite/launcher-api": "^0.4.0-alpha.a415ffc9",
-    "@bauxite/launcher-api-forge": "^0.3.0",
+    "@bauxite/launcher-api": "^0.4.0",
+    "@bauxite/launcher-api-forge": "^0.4.0",
     "apollo-server-express": "^1.3.2",
     "express": "^4.16.2",
     "express-graphiql": "^1.0.0",

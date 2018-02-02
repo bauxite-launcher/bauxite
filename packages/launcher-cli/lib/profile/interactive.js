@@ -2,7 +2,8 @@ const {
   listProfiles,
   createProfile,
   deleteProfile,
-  getAvatarByUuid
+  getAvatarByUuid,
+  getInstalledPlugins
 } = require('@bauxite/launcher-api')
 const ora = require('ora')
 const { prompt, Separator } = require('inquirer')
@@ -46,7 +47,9 @@ const profileMenu = async exitAfter => {
   if (action === 'back') {
     return exitAfter()
   } else if (action === 'login') {
-    await menuLoop(loginForm)
+    if (await menuLoop(loginForm)) {
+      exitAfter()
+    }
   } else {
     if (await menuLoop(manageProfile, action)) {
       return exitAfter()
@@ -68,8 +71,11 @@ const loginForm = async exitAfter => {
       when: ({ username }) => username
     }
   ])
-  if (!username) return exitAfter()
-  const spinner = ora('Authenticating with Mojang')
+  if (!username) {
+    exitAfter()
+    return true
+  }
+  const spinner = ora('Authenticating with Mojang').start()
   let newProfile
   try {
     newProfile = await createProfile(username, password)
@@ -80,7 +86,7 @@ const loginForm = async exitAfter => {
     spinner.fail(`Could not authenticate with Mojang!`)
     return
   }
-  await menuLoop(manageProfile, newProfile)
+  return await menuLoop(manageProfile, newProfile)
 }
 
 const manageProfile = async (exitAfter, profile) => {
@@ -106,7 +112,7 @@ const manageProfile = async (exitAfter, profile) => {
     case 'logout':
       await deleteProfileMenu(profile.username)
       exitAfter()
-      return true;
+      return true
   }
   exitAfter()
 }

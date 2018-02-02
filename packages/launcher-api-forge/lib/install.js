@@ -3,7 +3,8 @@ const {
   readJson,
   writeJson,
   createReadStream,
-  createWriteStream
+  createWriteStream,
+  remove
 } = require('fs-extra')
 const {
   downloadToFile,
@@ -15,21 +16,11 @@ const { getForgeVersionByID } = require('./versions')
 const { getForgeClientLibraries } = require('./libraries')
 const { Decompressor: LzmaDecompressor } = require('xz')
 
-//TODO: remove
-const logProgress = ({ percent, percentage }) =>
-  process.stdout.write(
-    `\rDownloading ${(percent || percentage || 0).toFixed(1)}%`
-  )
-
 // TODO: onProgress callback
 const installForge = async (directory, forgeVersionID) => {
   const instanceConfigPath = path.join(directory, 'bauxite.json')
   const instanceID = path.basename(directory)
   const { versionID, ...oldConfig } = await readJson(instanceConfigPath)
-
-  console.log('Instance name:', instanceID)
-  console.log('Minecraft version:', versionID)
-  console.log('Forge version ID:', forgeVersionID)
 
   const forgeVersion = await getForgeVersionByID(forgeVersionID)
   if (!forgeVersion) {
@@ -41,15 +32,10 @@ const installForge = async (directory, forgeVersionID) => {
     )
   }
 
-  console.log('Downloading Forge universal bundle...\n')
-  const jarFile = await downloadForge(directory, forgeVersion, {
-    onProgress: logProgress
-  })
+  const jarFile = await downloadForge(directory, forgeVersion)
 
-  console.log('\nInspecting Forge bundle for required libraries...')
   const libraries = await getForgeClientLibraries(jarFile)
 
-  console.log('Checking remote availability of required libraries...')
   const preflightResults = await Promise.all(
     libraries.map(async ({ url }) => await downloadPreflightCheck(url))
   )
@@ -66,11 +52,6 @@ const installForge = async (directory, forgeVersionID) => {
           }"`
         )
       }
-      console.info(
-        `Could not find compressed version of forge library "${
-          library.name
-        }". Falling back to uncompressed version.`
-      )
       return {
         ...library,
         fellBack: true,
@@ -81,19 +62,14 @@ const installForge = async (directory, forgeVersionID) => {
     })
   )
 
-  console.log('Downloading Forge required libraries...\n')
   const librariesDirectory = path.join(directory, 'libraries')
-  await downloadManyFiles(librariesDirectory, checkedLibraries, {
-    onProgress: logProgress
-  })
+  await downloadManyFiles(librariesDirectory, checkedLibraries)
 
-  console.log('\nExtracting packed libraries...')
   const compressedLibraries = checkedLibraries.filter(
     ({ compressed }) => compressed
   )
   await extractCompressedLibraries(librariesDirectory, compressedLibraries)
 
-  console.log('\nUpdating instance config...')
   const newConfig = {
     ...oldConfig,
     versionID,
@@ -101,8 +77,6 @@ const installForge = async (directory, forgeVersionID) => {
   }
 
   await writeJson(instanceConfigPath, newConfig)
-
-  console.log('Updated!', newConfig)
 
   return {
     ID: instanceID,

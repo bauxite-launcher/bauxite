@@ -60,8 +60,6 @@ const generateForgeLaunchArguments = async ({ instance, profile, version }) => {
     relativeDirectory
   )
 
-  console.log(classPaths.map(x => ` - ${x}`))
-
   return [
     '-Xmx4G', // TODO: Make configurable
     `-Djava.library.path=${relativeDirectory('natives')}`,

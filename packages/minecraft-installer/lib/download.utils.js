@@ -100,7 +100,6 @@ const downloadManyFiles = async (
 
 const downloadPreflightCheck = async (url, { fetch = defaultFetch } = {}) => {
   const res = await fetch(url, { method: 'HEAD' })
-  if (!res.ok) console.log(url, res.status, res.statusText, res.headers.raw())
   return res.ok
 }
 

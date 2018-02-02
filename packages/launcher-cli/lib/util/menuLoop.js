@@ -1,9 +1,10 @@
 const menuLoop = async (menu, ...args) => {
   let shouldContinue = true
   let previousErrorThrown
+  let lastResult
   do {
     try {
-      await menu(() => (shouldContinue = false), ...args)
+      lastResult = await menu(() => (shouldContinue = false), ...args)
     } catch (error) {
       console.error(
         `Error in menu loop "${menu.name}":\n${error.stack || error}`
@@ -15,6 +16,7 @@ const menuLoop = async (menu, ...args) => {
       previousErrorThrown = error
     }
   } while (shouldContinue)
+  return lastResult
 }
 
 module.exports = { menuLoop }
