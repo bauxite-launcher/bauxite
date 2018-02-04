@@ -64,7 +64,7 @@ const generateForgeLaunchArguments = async ({ instance, profile, version }) => {
     '-Xmx4G', // TODO: Make configurable
     `-Djava.library.path=${relativeDirectory('natives')}`,
     '-cp',
-    classPaths.join(':'),
+    classPaths.join(path.delimiter),
     clientMainClass,
     ...jarArgs
   ]

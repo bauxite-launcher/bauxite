@@ -19,7 +19,10 @@
 * [x] Local client CLI launcher
   * [x] Forge integration
   * [ ] CurseForge integration
+  * [ ] Technic integration
   * [ ] Remote server management in local client
 * [ ] Local server CLI launcher
   * [ ] Forge integration
   * [ ] CurseForge integration
+  * [ ] Sponge(Vanilla|Forge) integration
+  * [ ] Technic integration
