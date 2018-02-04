@@ -19,9 +19,11 @@ const getForgeInstanceManifest = async forgeJar => {
 
 // TODO: Rename this; not just libraries any more
 const getForgeLibraries = async forgeJar => {
-  const { minecraftArguments, mainClass, libraries } = await getForgeInstanceManifest(
-    forgeJar
-  )
+  const {
+    minecraftArguments,
+    mainClass,
+    libraries
+  } = await getForgeInstanceManifest(forgeJar)
   const formattedLibraries = libraries
     .map(library => {
       const {

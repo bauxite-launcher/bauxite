@@ -82,7 +82,7 @@ const generateVanillaLaunchArguments = ({ instance, profile, version }) => {
     '-Xmx1G', // TODO: Make configurable
     `-Djava.library.path=${relativeDirectory('natives')}`,
     '-cp',
-    classPaths.join(':'),
+    classPaths.join(path.delimiter),
     version.client.mainClass,
     ...jarArgs
   ]
