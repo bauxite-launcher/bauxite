@@ -1,19 +1,7 @@
-const decompress = require('decompress')
+const { getFilesFromArchive } = require('./utils')
 
 const MINECRAFT_MAVEN_URL = 'https://libraries.minecraft.net/'
 const FORGE_MAVEN_URL = 'http://files.minecraftforge.net/maven/'
-
-// TODO: Move to utils
-const getFilesFromArchive = async (archivePath, targetFiles) => {
-  try {
-    return await decompress(archivePath, {
-      filter: targetFiles && (({ path }) => targetFiles.includes(path))
-    })
-  } catch (error) {
-    console.error(error.stack)
-    throw new Error(`Could not extract files from "${archivePath}"`)
-  }
-}
 
 const getForgeInstanceManifest = async forgeJar => {
   const [manifestFile] = await getFilesFromArchive(forgeJar, ['version.json'])
