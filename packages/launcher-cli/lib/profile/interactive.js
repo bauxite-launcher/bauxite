@@ -3,6 +3,7 @@ const {
   createProfile,
   deleteProfile,
   getAvatarByUuid,
+  getProfileByUUID,
   getInstalledPlugins
 } = require('@bauxite/launcher-api')
 const ora = require('ora')
@@ -89,7 +90,8 @@ const loginForm = async exitAfter => {
   return await menuLoop(manageProfile, newProfile)
 }
 
-const manageProfile = async (exitAfter, profile) => {
+const manageProfile = async (exitAfter, { uuid }) => {
+  const profile = await getProfileByUUID(uuid)
   await renderProfile(profile)
   const { action } = await prompt([
     {

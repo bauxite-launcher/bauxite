@@ -1,19 +1,28 @@
 const {
   listInstances,
   deleteInstance,
+  cloneInstance,
+  renameInstance,
   getInstalledPlugins,
   installForge,
   getForgeVersionsForMinecraftVersion
 } = require('@bauxite/launcher-api')
 const { prompt, Separator } = require('inquirer')
-const ora = require('ora')
+const Listr = require('listr')
 const { menuLoop } = require('../util/menuLoop')
 
 exports.command = '$0'
 exports.handler = async () => await menuLoop(instancesMenu)
 
 const instancesMenu = async exitAfter => {
-  const instances = await listInstances()
+  const { instances } = await new Listr([
+    {
+      title: 'Get instances',
+      task: async context => {
+        context.instances = await listInstances()
+      }
+    }
+  ]).run()
   if (!instances.length) return exitAfter()
   const { action } = await prompt([
     {
@@ -92,14 +101,32 @@ const deleteMenu = async instance => {
     }
   ])
   if (!confirm) return
-  const spinner = ora('Deleting instance...').start()
-  const successful = await deleteInstance(instance.ID)
-  if (successful) {
-    spinner.succeed('Deleted instance')
-  } else {
-    spinner.fail('Could not delete instance')
-  }
+  const { successful } = await new Listr([
+    {
+      title: 'Delete instance',
+      task: async context => {
+        context.successful = await deleteInstance(instance.ID)
+      }
+    }
+  ]).run()
   return successful
+}
+
+const renameMenu = async instance => {
+  const { newID } = await prompt([
+    {
+      type: 'input',
+      name: 'newID',
+      message: 'Enter a new name for the instance:'
+    }
+  ])
+  if (!newID) return
+  await new Listr([
+    {
+      title: 'Rename instance',
+      task: async () => await renameInstance(instance.ID, newID)
+    }
+  ]).run()
 }
 
 const cloneMenu = async instance => {
@@ -107,37 +134,50 @@ const cloneMenu = async instance => {
     {
       type: 'input',
       name: 'newID',
-      message: 'Enter a name for the clone of the instance:',
-      validate: ({ newID }) => newID.match(/^[a-z0-9-]+$/i)
+      message: 'Enter a name for the clone of the instance:'
     }
   ])
   if (!newID) return
-  const spinner = ora(`Copying instance "${instance.ID}" as "${newID}"`).start()
-  try {
-    await cloneInstance(instance.ID, newID)
-    spinner.succeed('Copied instance')
-  } catch (error) {
-    console.error(error.stack)
-    spinner.fail('Could not copy instance')
-  }
+  await new Listr([
+    {
+      // TODO: Add progress
+      title: 'Copy instance',
+      task: async () => await cloneInstance(instance.ID, newID)
+    }
+  ]).run()
 }
 
 const installForgeMenu = async (exitAfter, instance) => {
-  const spinner = ora(
-    `Getting versions of Forge compatible with ${instance.versionID}...`
-  ).start()
-  const forgeVersions = await getForgeVersionsForMinecraftVersion(
-    instance.versionID
-  )
-  spinner.stop()
+  const { forgeVersions } = await new Listr([
+    {
+      title: `Get Forge versions compatible with ${instance.versionID}`,
+      task: async context => {
+        context.forgeVersions = await getForgeVersionsForMinecraftVersion(
+          instance.versionID
+        )
+      }
+    }
+  ]).run()
+
+  const recommendedForgeVersionID = forgeVersions.find(
+    ({ recommended }) => recommended
+  ).ID
+  const latestForgeVersionID = forgeVersions.find(({ latest }) => latest).ID
+
   const { versionType, selectedForgeVersionID } = await prompt([
     {
       type: 'list',
       name: 'versionType',
       message: 'Which version of Forge should I install?',
       choices: [
-        { value: 'recommended', name: 'The recommended compatible version' },
-        { value: 'latest', name: 'The latest (unstable) compatible version' },
+        {
+          value: 'recommended',
+          name: `The recommended compatible version (${recommendedForgeVersionID})`
+        },
+        {
+          value: 'latest',
+          name: `The latest (unstable) compatible version (${latestForgeVersionID})`
+        },
         { value: 'select', name: 'Let me choose a version!' },
         new Separator(),
         { value: 'back', name: 'Go back' }
@@ -158,34 +198,18 @@ const installForgeMenu = async (exitAfter, instance) => {
     }
   ])
 
-  let forgeVersionID
-  switch (versionType) {
-    case 'recommended':
-      forgeVersionID = forgeVersions.find(({ recommended }) => recommended).ID
-      break
-    case 'latest':
-      forgeVersionID = forgeVersions.find(({ latest }) => latest).ID
-      break
-    case 'select':
-      forgeVersionID = selectedForgeVersionID
-      break
-    default:
-      return exitAfter()
-  }
-  const installSpinner = ora(
-    `Downloading and installing Forge ${forgeVersionID}`
-  ).start()
-  try {
-    const updatedInstance = await installForge(
-      instance.directory,
-      forgeVersionID
-    )
-    installSpinner.succeed(`Installed Forge ${forgeVersionID}!`)
-    await menuLoop(manageInstance, updatedInstance)
-  } catch (error) {
-    console.error(error.stack || error)
-    installSpinner.fail(`Failed to install ${forgeVersionID}`)
-  }
+  if (versionType === 'back') return exitAfter()
+
+  const forgeVersionID = {
+    recommended: recommendedForgeVersionID,
+    latest: latestForgeVersionID,
+    select: selectedForgeVersionID
+  }[versionType]
+
+  await installForge({ silent: false }).run({
+    directory: instance.directory,
+    forgeVersionID
+  })
 
   exitAfter()
   return true

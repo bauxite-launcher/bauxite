@@ -2,6 +2,7 @@ const path = require('path')
 const { ensureDir } = require('fs-extra')
 const { noop } = require('lodash')
 const decompress = require('decompress')
+const Listr = require('listr')
 const { downloadManyFiles } = require('./download.utils')
 
 const extractLibraries = async (targetDirectory, libraries) => {
@@ -27,7 +28,7 @@ const extractLibraries = async (targetDirectory, libraries) => {
   )
 }
 
-const downloadLibraries = async (
+const downloadLibraries = (
   targetDirectory,
   libraries = [],
   downloadOptions
@@ -36,8 +37,19 @@ const downloadLibraries = async (
     (files, { downloads }) => files.concat(downloads),
     []
   )
-  await downloadManyFiles(targetDirectory, files, downloadOptions)
-  return await extractLibraries(targetDirectory, libraries)
+  return new Listr(
+    [
+      {
+        title: 'Download',
+        task: () => downloadManyFiles(targetDirectory, files, downloadOptions)
+      },
+      {
+        title: 'Extract',
+        task: () => extractLibraries(targetDirectory, libraries)
+      }
+    ],
+    { concurrent: false }
+  )
 }
 
 const downloadAssets = async (

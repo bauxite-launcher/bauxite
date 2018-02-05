@@ -4,22 +4,36 @@ const {
   stopInstance,
   getDefaultProfile
 } = require('@bauxite/launcher-api')
+const path = require('path')
+const { ensureDir, remove } = require('fs-extra')
+const { Tail } = require('tail')
 const { prompt, Separator } = require('inquirer')
-const ora = require('ora')
+const Listr = require('listr')
 const { menuLoop } = require('../util/menuLoop')
 
 exports.command = '$0'
 exports.handler = async () => await menuLoop(launchMenu)
 
 const launchMenu = async exitAfter => {
-  const spinner = ora('Fetching installed instances').start()
-  const instances = await listInstances()
-  spinner.stop()
-  if (!instances.length) return exitAfter()
+  const { instances, profile } = await new Listr(
+    [
+      {
+        title: 'Get installed instances',
+        task: async context => {
+          context.instances = await listInstances()
+        }
+      },
+      {
+        title: 'Get default profile',
+        task: async context => {
+          context.profile = await getDefaultProfile()
+        }
+      }
+    ],
+    { concurrent: true }
+  ).run()
 
-  const profileSpinner = ora(`Getting default profile`).start()
-  const profile = await getDefaultProfile()
-  profileSpinner.stop()
+  if (!instances.length) return exitAfter()
   if (!profile) {
     console.log('You must be logged in to launch Minecraft.')
     return exitAfter()
@@ -48,14 +62,47 @@ const launchMenu = async exitAfter => {
 }
 
 const launchInstance = async (instance, profile) => {
-  const launchSpinner = ora(
-    `Starting "${instance.ID}" (Minecraft ${instance.versionID})`
-  ).start()
-  try {
-    await startInstance(instance.ID, profile.username)
-    launchSpinner.succeed(`Instance "${instance.ID}" started!`)
-  } catch (error) {
-    console.error(error.stack)
-    launchSpinner.fail(`Could not launch instance "${instance.ID}"`)
-  }
+  return await new Listr([
+    {
+      title: 'Rotate logs',
+      task: () => rotateLogs(instance)
+    },
+    {
+      title: 'Launch instance',
+      task: async context => {
+        const { process } = await startInstance(instance.ID, profile.username)
+        context.process = process
+      }
+    },
+    {
+      title: 'Wait for launch',
+      task: async context => await instanceStarted(instance, context.process)
+    },
+    {
+      title: 'Dereference instance',
+      task: context => {
+        context.process.unref()
+      }
+    }
+  ]).run()
+}
+
+// TODO: Do this properly
+const rotateLogs = async instance => {
+  const logDirectory = path.join(instance.directory, 'logs')
+  await remove(logDirectory)
+  await ensureDir(logDirectory)
+}
+
+const instanceStarted = async (instance, process) => {
+  const logFile = path.join(instance.directory, 'logs', 'out.log')
+  const tail = new Tail(logFile)
+  await new Promise(resolve => {
+      tail.on('line', line => {
+        if (line.includes('Reloading ResourceManager')) {
+          resolve()
+        }
+      })
+  })
+  tail.unwatch()
 }

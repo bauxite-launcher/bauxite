@@ -2,7 +2,7 @@ const path = require('path')
 const { spawn } = require('child_process')
 const { promisify } = require('util')
 const { kill, lookup } = require('ps-node')
-const { readFile, writeFile } = require('fs-extra')
+const { readFile, writeFile, open } = require('fs-extra')
 const { getVersionManifest } = require('./versions')
 const { getInstance } = require('./instances')
 const { getProfileByUsername, getAccessToken } = require('./profiles')
@@ -98,18 +98,21 @@ const startInstance = async (instanceID, username) => {
   const version = await getVersionManifest(instance.versionID)
   const args = await generateLaunchArguments({ instance, profile, version })
 
+  const logFile = path.join(instance.directory, 'logs', 'out.log')
+  const out = await open(logFile, 'a')
+  const err = await open(logFile, 'a')
+
   const client = spawn('java', args, {
     cwd: instance.directory,
-    stdio: 'ignore',
+    stdio: ['ignore', out, err],
     detached: true
   })
-
-  client.unref()
 
   await setProcessID(instance.directory, client.pid)
   return {
     ...instance,
-    processID: client.pid
+    processID: client.pid,
+    process: client
   }
 }
 

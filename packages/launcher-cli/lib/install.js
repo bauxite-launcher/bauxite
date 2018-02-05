@@ -1,4 +1,6 @@
 const { prompt } = require('inquirer')
+const Listr = require('listr')
+const { Observable } = require('rxjs')
 const ProgressBar = require('cli-progress-bar')
 const {
   getMinecraftVersions
@@ -21,19 +23,15 @@ exports.builder = yargs =>
 
 exports.handler = async argv => {
   const { name, version } = await interactivelyFillOptions(argv)
-  const bar = new ProgressBar()
-  const newInstance = await installInstance(name || null, version, {
-    onProgress: ({ percent }) =>
-      bar.show(
-        `Downloading Minecraft ${version}… (${percent.toFixed(0)}%)`,
-        percent / 100
-      )
+  const installer = installInstance({ silent: false })
+  const { instance } = await installer.run({
+    instanceID: name,
+    versionID: version
   })
-  bar.hide()
   console.log('\n  Your new instance was installed successfully!\n')
-  console.log('    - Name:', newInstance.ID)
-  console.log('    - Minecraft Version:', newInstance.versionID)
-  console.log('    - Directory:', newInstance.directory, '\n')
+  console.log('    - Name:', instance.ID)
+  console.log('    - Minecraft Version:', instance.versionID)
+  console.log('    - Directory:', instance.directory, '\n')
 }
 
 const interactivelyFillOptions = async argv => {

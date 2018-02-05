@@ -2,6 +2,8 @@ const defaultFetch = require('make-fetch-happen')
 const { ensureDir, createWriteStream } = require('fs-extra')
 const { dirname, join: joinPath } = require('path')
 const progressStream = require('progress-stream')
+const { Observable } = require('rxjs')
+const Listr = require('listr')
 const { get, noop, sumBy } = require('lodash')
 
 const createDownloadStream = async (
@@ -18,24 +20,26 @@ const createDownloadStream = async (
   }
 }
 
-const downloadToFile = async (
-  url,
-  path,
-  { onProgress = noop, createDirs = true, ...options } = {}
-) => {
-  if (createDirs) {
-    await ensureDir(dirname(path))
-  }
-  const fileWriteStream = createWriteStream(path)
-  const { stream: downloadStream, size } = await createDownloadStream(
-    url,
-    options
-  )
-  const progress = progressStream({ length: size, time: 100 })
-  progress.on('progress', onProgress)
-  const piped = downloadStream.pipe(progress).pipe(fileWriteStream)
-  await streamCompleted(fileWriteStream)
-  return { url, path, size }
+const downloadToFile = (url, path, { createDirs = true, ...options } = {}) => {
+  return new Observable(observer => {
+    const dirCreated = createDirs ? ensureDir(dirname(path)) : Promise.resolve()
+    dirCreated
+      .then(() => createDownloadStream(url, options))
+      .then(({ stream: downloadStream, size }) => {
+        const fileWriteStream = createWriteStream(path)
+        const progress = progressStream({ length: size, time: 100 })
+        progress.on('progress', ({ transferred, length, percentage }) =>
+          observer.next(
+            `Downloading ${(transferred / Math.pow(2, 20)).toFixed(1)}/${(
+              length / Math.pow(2, 20)
+            ).toFixed(1)}MB (${percentage.toFixed(2)}%)`
+          )
+        )
+        const piped = downloadStream.pipe(progress).pipe(fileWriteStream)
+        return streamCompleted(fileWriteStream)
+      })
+      .then(() => observer.complete(), error => observer.error(error))
+  })
 }
 
 const streamCompleted = async stream =>
@@ -43,59 +47,29 @@ const streamCompleted = async stream =>
     stream.on('error', reject).on('finish', resolve)
   )
 
-// TODO: Better error handling
+// TODO: Smarter observer with more detail (percent total filesize)
 const downloadManyFiles = async (
   targetDirectory,
   files = [],
-  { onProgress = noop, fetchOptions } = {}
+  { onProgress = noop, fetchOptions, silent = true } = {}
 ) => {
-  const totalSize = sumBy(files, 'size')
-  let progressState = {
-    totalSize: sumBy(files, 'size'),
-    totalFiles: files.length,
-    completedSize: 0,
-    completedFiles: 0,
-    active: []
-  }
-
-  const progressTick =
-    onProgress === noop
-      ? noop
-      : (delta = 0, fileComplete = 0) => {
-          const completedSize = progressState.completedSize + delta
-          const completedFiles = progressState.completedFiles + fileComplete
-          progressState = {
-            ...progressState,
-            completedSize,
-            completedFiles,
-            percent: completedSize / progressState.totalSize * 100,
-            percentFiles: completedFiles / progressState.totalFiles * 100,
-            delta
-          }
-          onProgress(progressState)
-        }
-  progressTick()
-
-  return await Promise.all(
-    files.map(async file => {
-      progressState.active.push(file.ID)
-      const downloadPath = joinPath(targetDirectory, file.path)
-      await ensureDir(dirname(downloadPath))
-      const result = await downloadToFile(file.url, downloadPath, {
-        onProgress: ({ delta, percentage }) => {
-          if (percentage === 100) {
-            progressState.active = progressState.active.filter(
-              ID => ID !== file.ID
-            )
-          }
-          progressTick(delta)
-        },
-        ...fetchOptions
+  return new Observable(async observer => {
+    const total = files.length
+    let done = 0
+    observer.next(`Downloaded 0/${total} files`)
+    await Promise.all(
+      files.map(file => {
+        const downloadPath = joinPath(targetDirectory, file.path)
+        return downloadToFile(file.url, downloadPath, fetchOptions)
+          .toPromise()
+          .then(
+            () => observer.next(`Downloaded ${++done}/${total} files`),
+            error => observer.error(error)
+          )
       })
-      progressTick(0, 1)
-      return { ...file, ...result }
-    })
-  )
+    )
+    observer.complete()
+  })
 }
 
 const downloadPreflightCheck = async (url, { fetch = defaultFetch } = {}) => {

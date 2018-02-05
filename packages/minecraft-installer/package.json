@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "fs-extra": "^5.0.0",
+    "listr": "^0.13.0",
     "lodash": "^4.17.4",
     "make-fetch-happen": "^2.6.0",
     "progress-stream": "^2.0.0"
